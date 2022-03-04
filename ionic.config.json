@@ -1,0 +1,7 @@
+{
+  "name": "los-peines-de-ro-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
