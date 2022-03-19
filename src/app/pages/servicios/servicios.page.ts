@@ -14,8 +14,7 @@ export class ServiciosPage implements OnInit {
   servicios: Servicio[] = [];
   serviciosTemp: Servicio[] = [];
   categoriasTemp: Categoria[] = [];
-  filtrado = '';
-  select = '';
+  sinResultados: boolean;
 
   constructor(
     private catSvc: CategoriasService,
@@ -29,14 +28,18 @@ export class ServiciosPage implements OnInit {
     this.servSvc
       .getServicios()
       .subscribe((servicios) => (this.servicios = servicios));
+    this.sinResultados = false;
   }
 
   buscarServicio(event: any) {
     const valor = event.target.value.toLowerCase();
+    const input = (document.getElementById('select') as HTMLSelectElement);
+    input.options.selectedIndex = 0;
 
     if (valor === '') {
       this.serviciosTemp = this.servicios;
       this.categoriasTemp = this.categorias;
+      this.sinResultados = false;
     } else {
       this.serviciosTemp = [];
       this.categoriasTemp = [];
@@ -55,11 +58,17 @@ export class ServiciosPage implements OnInit {
           }
         }
       }
+
+      if (this.serviciosTemp.length === 0) {
+        this.sinResultados = true;
+      }
+
     }
   }
 
   buscarPorCategoria(event: any) {
     const valor = event.target.value;
+    this.resetInput();
 
     if (valor === '00') {
       this.serviciosTemp = this.servicios;
@@ -80,6 +89,12 @@ export class ServiciosPage implements OnInit {
         }
       }
     }
+  }
+
+  resetInput() {
+    const input = (document.getElementById('busqueda') as HTMLInputElement);
+    input.value = '';
+    this.ngOnInit();
   }
 
   getHoras(min: number): string {

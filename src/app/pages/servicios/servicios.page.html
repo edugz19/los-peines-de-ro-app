@@ -8,17 +8,20 @@
         <input
           type="text"
           class="form-control"
+          id="busqueda"
           placeholder="Busca un tratamiento..."
           name="filtrado"
           (keyup)="buscarServicio($event)"
         />
+        <ion-icon class="end" name="close-circle-outline" (click)="resetInput()"></ion-icon>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col size="12">
         <select 
-          class="form-select" 
+          class="form-select"
+          id="select"
           aria-label="Selecciona categoría"
           (change)="buscarPorCategoria($event)"
         >
@@ -31,7 +34,7 @@
     </ion-row>
   </ion-grid>
 
-  <div *ngIf="categoriasTemp.length === 0">
+  <div *ngIf="categoriasTemp.length === 0 && sinResultados === false">
     <div *ngFor="let categoria of categorias" class="categoria">
       <p class="text-secondary titulo-categoria">
         {{ categoria.nombre | uppercase }}
@@ -161,6 +164,12 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="categoriasTemp.length === 0 && sinResultados === true" class="p-3">
+    <p class="text-center">No hay resultados con su búsqueda.</p>
+    <p class="text-center text-secondary">Intente con algunas de las siguientes palabras: corte, mechas, peinado, etc</p>
+    <p class="text-center text-secondary"></p>
   </div>
   
 </ion-content>
