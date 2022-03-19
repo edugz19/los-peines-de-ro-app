@@ -1,0 +1,166 @@
+<ion-content>
+  <h6 class="titulo">ELIGE UNO O MÁS SERVICIOS</h6>
+
+  <ion-grid class="filtros">
+    <ion-row>
+      <ion-col size="12">
+        <ion-icon class="icon" name="search-outline"></ion-icon>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Busca un tratamiento..."
+          name="filtrado"
+          (keyup)="buscarServicio($event)"
+        />
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <select 
+          class="form-select" 
+          aria-label="Selecciona categoría"
+          (change)="buscarPorCategoria($event)"
+        >
+          <option selected value="00">Selecciona categoría</option>
+          <option *ngFor="let categoria of categorias" value="{{categoria.id}}">
+            {{ categoria.nombre | titlecase }}
+          </option>
+        </select>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="categoriasTemp.length === 0">
+    <div *ngFor="let categoria of categorias" class="categoria">
+      <p class="text-secondary titulo-categoria">
+        {{ categoria.nombre | uppercase }}
+      </p>
+
+      <div *ngIf="serviciosTemp.length === 0">
+        <div *ngFor="let servicio of servicios" class="mt-3">
+          <ion-item
+            class="ion-no-padding"
+            *ngIf="categoria.id === servicio.categoria"
+          >
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col size="7">
+                  <strong style="margin: 0"
+                    >{{ servicio.nombre | titlecase}}</strong
+                  >
+                  <span class="duracion text-secondary"
+                    >{{ getHoras(servicio.duracion) }}</span
+                  >
+                </ion-col>
+                <ion-col size="2"></ion-col>
+                <ion-col size="2">
+                  <span>{{ servicio.precio | currency: 'EUR' }}</span>
+                </ion-col>
+                <ion-col size="1">
+                  <ion-icon name="cart-outline"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </div>
+      </div>
+
+      <div *ngIf="serviciosTemp.length !== 0">
+        <div *ngFor="let servicio of serviciosTemp" class="mt-3">
+          <ion-item
+            class="ion-no-padding"
+            *ngIf="categoria.id === servicio.categoria"
+          >
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col size="7">
+                  <strong style="margin: 0"
+                    >{{ servicio.nombre | titlecase}}</strong
+                  >
+                  <span class="duracion text-secondary"
+                    >{{ getHoras(servicio.duracion) }}</span
+                  >
+                </ion-col>
+                <ion-col size="2"></ion-col>
+                <ion-col size="2">
+                  <span>{{ servicio.precio | currency: 'EUR' }}</span>
+                </ion-col>
+                <ion-col size="1">
+                  <ion-icon name="cart-outline"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="categoriasTemp.length !== 0">
+    <div *ngFor="let categoria of categoriasTemp" class="categoria">
+      <p class="text-secondary titulo-categoria">
+        {{ categoria.nombre | uppercase }}
+      </p>
+
+      <div *ngIf="serviciosTemp.length === 0">
+        <div *ngFor="let servicio of servicios" class="mt-3">
+          <ion-item
+            class="ion-no-padding"
+            *ngIf="categoria.id === servicio.categoria"
+          >
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col size="7">
+                  <strong style="margin: 0"
+                    >{{ servicio.nombre | titlecase}}</strong
+                  >
+                  <span class="duracion text-secondary"
+                    >{{ getHoras(servicio.duracion) }}</span
+                  >
+                </ion-col>
+                <ion-col size="2"></ion-col>
+                <ion-col size="2">
+                  <span>{{ servicio.precio | currency: 'EUR' }}</span>
+                </ion-col>
+                <ion-col size="1">
+                  <ion-icon name="cart-outline"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </div>
+      </div>
+
+      <div *ngIf="serviciosTemp.length !== 0">
+        <div *ngFor="let servicio of serviciosTemp" class="mt-3">
+          <ion-item
+            class="ion-no-padding"
+            *ngIf="categoria.id === servicio.categoria"
+          >
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col size="7">
+                  <strong style="margin: 0"
+                    >{{ servicio.nombre | titlecase}}</strong
+                  >
+                  <span class="duracion text-secondary"
+                    >{{ getHoras(servicio.duracion) }}</span
+                  >
+                </ion-col>
+                <ion-col size="2"></ion-col>
+                <ion-col size="2">
+                  <span>{{ servicio.precio | currency: 'EUR' }}</span>
+                </ion-col>
+                <ion-col size="1">
+                  <ion-icon name="cart-outline"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</ion-content>

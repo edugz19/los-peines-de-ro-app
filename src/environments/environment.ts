@@ -3,6 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  firebase: {
+    projectId: 'los-peines-de-ro',
+    appId: '1:1065261625373:web:8900fa27820245624c16f4',
+    storageBucket: 'los-peines-de-ro.appspot.com',
+    locationId: 'us-central',
+    apiKey: 'AIzaSyApbA33CtwYvl41sblhVLSktrGpLw3cH-Q',
+    authDomain: 'los-peines-de-ro.firebaseapp.com',
+    messagingSenderId: '1065261625373',
+    measurementId: 'G-EP3E7PXHQ2',
+  },
   production: false
 };
 

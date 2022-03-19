@@ -12,6 +12,7 @@
 Thumbs.db
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
+android
 
 *.log
 log.txt
@@ -30,3 +31,8 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json

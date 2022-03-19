@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "los-peines-de-ro": {
+      "hosting": {
+        "app": [
+          "los-peines-de-ro"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "los-peines-de-ro"
+  }
+}
