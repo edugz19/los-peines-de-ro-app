@@ -68,7 +68,8 @@ export class ServiciosPage implements OnInit {
 
   buscarPorCategoria(event: any) {
     const valor = event.target.value;
-    this.resetInput();
+    const input = (document.getElementById('busqueda') as HTMLInputElement);
+    input.value = '';
 
     if (valor === '00') {
       this.serviciosTemp = this.servicios;
