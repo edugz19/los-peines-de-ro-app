@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { Categoria } from '../../models/categoria.interface';
 import { Servicio } from '../../models/servicio.interface';
 import { CategoriasService } from '../../services/categorias.service';
+import { InfoModalPage } from '../info-modal/info-modal.page';
 
 @Component({
   selector: 'app-servicios',
@@ -18,7 +20,8 @@ export class ServiciosPage implements OnInit {
 
   constructor(
     private catSvc: CategoriasService,
-    private servSvc: ServiciosService
+    private servSvc: ServiciosService,
+    public modalController: ModalController
   ) {}
 
   ngOnInit() {
@@ -115,5 +118,28 @@ export class ServiciosPage implements OnInit {
     }
 
     return duracion;
+  }
+
+  truncarPrecio(precio: number): number {
+    if (precio % 1 === 0) {
+      return Math.trunc(precio);
+    } else {
+      return precio;
+    }
+  }
+
+  async openModal(servicio: Servicio) {
+    const modal = await this.modalController.create({
+      component: InfoModalPage,
+      cssClass: 'css-modal',
+      componentProps: {
+        servicio: servicio.nombre,
+        descripcion: servicio.descripcion,
+        precio: servicio.precio,
+        duracion: servicio.duracion
+      }
+    });
+
+    return await modal.present();
   }
 }

@@ -22,6 +22,10 @@ const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
+  },
+  {
+    path: 'info-modal',
+    loadChildren: () => import('./pages/info-modal/info-modal.module').then( m => m.InfoModalPageModule)
   }
 ];
 @NgModule({
