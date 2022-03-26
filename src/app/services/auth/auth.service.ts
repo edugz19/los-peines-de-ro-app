@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { User, UserProfile } from 'firebase/auth';
 import { first } from 'rxjs/operators';
+import { ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private afAuth: AngularFireAuth) {}
+  constructor(
+    private afAuth: AngularFireAuth,
+    public toast: ToastController
+  ) {}
 
   async register(email: string, password: string) {
     try {
@@ -25,7 +29,7 @@ export class AuthService {
       return result;
 
     } catch (error) {
-      console.log(error);
+      this.presentToast();
     }
   }
 
@@ -45,7 +49,7 @@ export class AuthService {
     try {
       return this.afAuth.sendPasswordResetEmail(email);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -53,5 +57,14 @@ export class AuthService {
     return (await this.afAuth.currentUser).updateProfile({
       displayName: nombre
     });
+  }
+
+  async presentToast() {
+    const toast = await this.toast.create({
+      message: 'El correo electrónico o la contraseña son incorrectos',
+      duration: 2000,
+      color: 'danger'
+    });
+    toast.present();
   }
 }

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginPage implements OnInit {
   constructor(
     public router: Router,
     private fb: FormBuilder,
-    private authSvc: AuthService
+    private authSvc: AuthService,
+    public toast: ToastController
   ) { }
 
   ngOnInit() {
@@ -36,7 +38,7 @@ export class LoginPage implements OnInit {
       }
 
     } catch(error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
