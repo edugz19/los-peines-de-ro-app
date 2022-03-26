@@ -13,7 +13,7 @@ export class LoginPage implements OnInit {
   ocultarPass = true;
   private emailValido = /\S+@\S+\.\S+/;
   loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.pattern(this.emailValido)]],
+    email: ['', [Validators.required, Validators.email]],
     pass: ['', [Validators.required]]
   });
 
@@ -49,7 +49,7 @@ export class LoginPage implements OnInit {
 
     if (this.loginForm.get(campo)?.errors?.required) {
       mensaje = 'Debes rellenar este campo';
-    } else if (this.loginForm.get(campo)?.hasError('pattern')) {
+    } else if (this.loginForm.get(campo)?.hasError('email')) {
       mensaje = 'Email inválido';
     }
 
