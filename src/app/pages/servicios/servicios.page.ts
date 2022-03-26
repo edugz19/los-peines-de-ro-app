@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { ServiciosService } from 'src/app/services/servicios.service';
+import { ServiciosService } from 'src/app/services/servicios/servicios.service';
 import { Categoria } from '../../models/categoria.interface';
 import { Servicio } from '../../models/servicio.interface';
-import { CategoriasService } from '../../services/categorias.service';
+import { CategoriasService } from '../../services/categorias/categorias.service';
 import { InfoModalPage } from '../info-modal/info-modal.page';
 
 @Component({

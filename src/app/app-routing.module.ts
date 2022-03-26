@@ -26,6 +26,22 @@ const routes: Routes = [
   {
     path: 'info-modal',
     loadChildren: () => import('./pages/info-modal/info-modal.module').then( m => m.InfoModalPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'registro',
+    loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
+  },
+  {
+    path: 'verificar-email',
+    loadChildren: () => import('./pages/verificar-email/verificar-email.module').then( m => m.VerificarEmailPageModule)
+  },
+  {
+    path: 'recuperar-pass',
+    loadChildren: () => import('./pages/recuperar-pass/recuperar-pass.module').then( m => m.RecuperarPassPageModule)
   }
 ];
 @NgModule({

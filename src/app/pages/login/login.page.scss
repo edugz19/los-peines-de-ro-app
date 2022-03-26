@@ -1,0 +1,31 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+ion-card {
+    margin: 2rem auto;
+    text-align: center;
+    min-width: 300px;
+    width: 90%;
+}
+
+ion-input {
+    text-align: start;
+    color:#757575;
+}
+
+.danger {
+    color: red;
+    text-align: left;
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+.forget {
+    margin-top: 30px;
+}

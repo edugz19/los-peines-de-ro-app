@@ -1,0 +1,76 @@
+<ion-content>
+  <div class="login">
+    <ion-card>
+      <ion-card-content>
+        <h1 class="mb-3 mt-3">Crear Cuenta</h1>
+        <!-- <img src="" alt="Logo Los Peines de Ro"> -->
+        <form [formGroup]="registroForm" (ngSubmit)="registro()">
+          <ion-item class="full-width-input mt-2 ion-no-padding">
+            <ion-input
+            formControlName="nombre"
+            placeholder="Nombre Completo" 
+            type="text" 
+            required
+            ></ion-input>
+          </ion-item>
+          <p *ngIf="esValido('nombre')" class="danger">{{ mostrarError('nombre') }}</p>
+
+          <ion-item class="full-width-input mt-2 ion-no-padding">
+            <ion-input
+            formControlName="email"
+            placeholder="Correo Electrónico" 
+            type="text" 
+            required
+            ></ion-input>
+          </ion-item>
+          <p *ngIf="esValido('email')" class="danger">{{ mostrarError('email') }}</p>
+
+          <ion-item class="full-width-input mt-2 ion-no-padding">
+            <ion-input
+            formControlName="telefono"
+            placeholder="Número de teléfono" 
+            type="text" 
+            required
+            maxlength="9"
+            ></ion-input>
+          </ion-item>
+          <p *ngIf="esValido('telefono')" class="danger">{{ mostrarError('telefono') }}</p>
+  
+          <ion-item class="full-width-input mt-3 ion-no-padding">
+            <ion-input
+            [type]="ocultarPass ? 'password' : 'text'"
+            formControlName="pass"
+            placeholder="Contraseña" 
+            type="password" 
+            required
+            ></ion-input>
+            <ion-icon [name]="ocultarPass ? 'eye' : 'eye-off'" slot="end" (click)="ocultarPass = !ocultarPass"></ion-icon>
+          </ion-item>
+          <p *ngIf="esValido('pass')" class="danger">{{ mostrarError('pass') }}</p>
+
+          <ion-item class="full-width-input mt-3 ion-no-padding">
+            <ion-input
+            [type]="ocultarVerifPass ? 'password' : 'text'"
+            formControlName="verificarPass"
+            placeholder="Repetir Contraseña" 
+            type="password" 
+            required
+            ></ion-input>
+            <ion-icon [name]="ocultarVerifPass ? 'eye' : 'eye-off'" slot="end" (click)="ocultarVerifPass = !ocultarVerifPass"></ion-icon>
+          </ion-item>
+          <p *ngIf="esValido('verificarPass')" class="danger">{{ mostrarError('verificarPass') }}</p>
+
+          <ion-button
+            [disabled]="registroForm.invalid"
+            type="submit"
+            expand="block" 
+            class="mt-4 mb-3"
+          >CONTINUAR</ion-button>
+
+          <a routerLink="/login">Volver al inicio de sesión</a><br>
+          
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

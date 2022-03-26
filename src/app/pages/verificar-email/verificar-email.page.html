@@ -1,0 +1,13 @@
+<ion-content>
+  <div class="card">
+    <ion-card>
+      <ion-card-content>
+        <ion-card-title class="ion-text-center mt-4">¡GRACIAS POR REGISTRARTE!</ion-card-title>
+        <p class="ion-text-center mt-3">Hemos enviado un correo de confirmación a <strong>{{ email }}</strong></p>
+        <p class="ion-text-center mb-4">Por favor, revisa el correo y pulsa sobre el enlace de verificación.</p>
+        <ion-button expand="block" (click)="enviarEmail()">REENVIAR EMAIL DE VERIFICACIÓN</ion-button>
+        <p class="ion-text-center mt-3"><a routerLink="/login">Ya he recibido el correo y he verificado mi cuenta</a></p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,25 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+ion-card {
+    padding: 20px;
+    box-shadow: none;
+}
+
+ion-input {
+    text-align: start;
+    color:#757575;
+}
+
+.danger {
+    color: red;
+    text-align: left;
+    margin-top: 5px;
+    font-size: 13px;
+}

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Servicio } from '../models/servicio.interface';
-import { ServiciosService } from '../services/servicios.service';
+import { ServiciosService } from '../services/servicios/servicios.service';
 
 @Pipe({
   name: 'select'

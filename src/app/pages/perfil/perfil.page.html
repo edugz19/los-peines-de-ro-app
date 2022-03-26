@@ -1,3 +1,29 @@
+<ion-header style="border-bottom: 1px solid rgb(248, 248, 248);" *ngIf="isLogged">
+  <div class="header">
+    <ion-avatar *ngIf="usuario.photoURL !== null">
+      <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-avatar>
+
+    <ion-avatar *ngIf="usuario.photoURL === null">
+        <img src="../../../assets/usuario.png">
+    </ion-avatar>
+    
+    <span class="text-secondary">{{ usuario.displayName }}</span>
+  </div>
+
+  <ion-button (click)="logout()" expand="block">CERRAR SESIÓN</ion-button>
+</ion-header>
+
 <ion-content>
-  <p>Inicie sesión en su perfil para administrar sus reservas.</p>
+  <ion-card *ngIf="!isLogged">
+    <ion-card-content>
+      <p>Inicie sesión en su perfil para administrar sus reservas.</p>
+      <ion-button 
+        class="mt-4"
+        expand="block"
+        (click)="login()"
+      >Acceder</ion-button>
+    </ion-card-content>
+  </ion-card>
+  
 </ion-content>
