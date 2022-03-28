@@ -9,6 +9,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { HeaderModule } from 'src/app/modules/header/header.module';
+import { CarouselComponent } from '../../components/carousel/carousel.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { HeaderModule } from 'src/app/modules/header/header.module';
     HeaderModule
   ],
   declarations: [
-    HomePage
+    HomePage,
+    CarouselComponent
   ]
 })
 export class HomePageModule {}

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CarouselItem } from '../../models/carouselItem.interface';
+import { CAROUSEL_DATA_ITEMS } from '../../constants/carousel.const';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
+  public carouselData: CarouselItem[] = CAROUSEL_DATA_ITEMS;
   constructor() { }
 
   ngOnInit() {
