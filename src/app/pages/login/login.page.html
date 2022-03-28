@@ -31,8 +31,17 @@
             [disabled]="loginForm.invalid"
             type="submit"
             expand="block" 
-            class="mt-4 mb-3"
+            class="mt-4 mb-2"
           >ACCEDER</ion-button>
+
+          <ion-button
+            (click)="loginGoogle()"
+            expand="block" 
+            class="mb-3"
+            color="danger"
+          >
+          <ion-icon name="logo-google"></ion-icon> &nbsp;
+          ACCEDER CON GOOGLE</ion-button>
         </form>
   
         <a routerLink="/recuperar-pass">¿Olvidaste la contraseña?</a><br>

@@ -12,7 +12,6 @@ import { ToastController } from '@ionic/angular';
 })
 export class LoginPage implements OnInit {
   ocultarPass = true;
-  private emailValido = /\S+@\S+\.\S+/;
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     pass: ['', [Validators.required]]
@@ -40,6 +39,12 @@ export class LoginPage implements OnInit {
     } catch(error) {
       // console.log(error);
     }
+  }
+
+  async loginGoogle() {
+    const result = await this.authSvc.loginGoogle();
+    window.location.href = 'perfil';
+    return result;
   }
 
   registrar(): void {

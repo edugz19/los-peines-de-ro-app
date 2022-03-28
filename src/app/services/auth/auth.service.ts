@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { User, UserProfile } from 'firebase/auth';
+import { GoogleAuthProvider, User, UserProfile } from 'firebase/auth';
 import { first } from 'rxjs/operators';
 import { ToastController } from '@ionic/angular';
 
@@ -33,6 +33,19 @@ export class AuthService {
     }
   }
 
+  async loginGoogle() {
+      return await this.AuthLogin(new GoogleAuthProvider());
+  }
+
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  async AuthLogin(provider) {
+    try {
+      const result = await this.afAuth.signInWithPopup(provider);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async logout() {
     await this.afAuth.signOut();
   }
@@ -58,6 +71,10 @@ export class AuthService {
       displayName: nombre
     });
   }
+
+  // async modificarTelefono() {
+  //   return await (await this.afAuth.currentUser).updatePhoneNumber()
+  // }
 
   async presentToast() {
     const toast = await this.toast.create({

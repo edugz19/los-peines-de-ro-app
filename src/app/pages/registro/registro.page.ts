@@ -42,7 +42,7 @@ export class RegistroPage implements OnInit {
 
       if (usuario) {
         this.authSvc.modificarNombre(nombre);
-        window.location.href = '/verificar-email';
+        this.router.navigate(['/verificar-email']);
       }
 
     } catch(error) {
