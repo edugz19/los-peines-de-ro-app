@@ -16,7 +16,7 @@ export class CarouselComponent implements OnInit {
   public currentPosition = 0;
 
   constructor() {
-    this.finalHeight = '94vh';
+    this.finalHeight = '51vh';
   }
 
   ngOnInit() {

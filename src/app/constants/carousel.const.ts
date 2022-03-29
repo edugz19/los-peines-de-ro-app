@@ -3,62 +3,32 @@ import { CarouselItem } from '../models/carouselItem.interface';
 export const CAROUSEL_DATA_ITEMS: CarouselItem[] = [
     {
         id: 1,
-        title: {
-            first: 'TITULO',
-            second: 'Principal'
-        },
-        subtitle: 'Esto es una gran descripción',
         link: '/',
-        image: 'assets/carousel/1.jpg'
+        image: 'assets/carousel/1.webp'
     },
     {
         id: 2,
-        title: {
-            first: 'TITULO',
-            second: 'Principal'
-        },
-        subtitle: 'Esto es una gran descripción',
         link: '/',
-        image: 'assets/carousel/2.jpg'
+        image: 'assets/carousel/2.webp'
     },
     {
         id: 3,
-        title: {
-            first: 'TITULO',
-            second: 'Principal'
-        },
-        subtitle: 'Esto es una gran descripción',
         link: '/',
-        image: 'assets/carousel/3.jpg'
+        image: 'assets/carousel/3.webp'
     },
     {
         id: 4,
-        title: {
-            first: 'TITULO',
-            second: 'Principal'
-        },
-        subtitle: 'Esto es una gran descripción',
         link: '/',
-        image: 'assets/carousel/4.jpg'
+        image: 'assets/carousel/4.webp'
     },
     {
         id: 5,
-        title: {
-            first: 'TITULO',
-            second: 'Principal'
-        },
-        subtitle: 'Esto es una gran descripción',
         link: '/',
-        image: 'assets/carousel/5.jpg'
+        image: 'assets/carousel/5.webp'
     },
     {
         id: 6,
-        title: {
-            first: 'TITULO',
-            second: 'Principal'
-        },
-        subtitle: 'Esto es una gran descripción',
         link: '/',
-        image: 'assets/carousel/6.jpg'
+        image: 'assets/carousel/6.webp'
     }
 ];
