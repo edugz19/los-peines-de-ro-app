@@ -42,4 +42,19 @@ ion-segment ion-label{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.no-logged {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.no-logged p {
+    font-size: 22px;
+    text-align: center;
 }

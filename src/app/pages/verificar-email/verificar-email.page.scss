@@ -11,3 +11,11 @@ ion-card {
     padding: 20px;
     box-shadow: none;
 }
+
+* {
+    font-family: 'Quicksand', sans-serif;
+}
+
+ion-button, ion-card-title {
+    font-weight: bold;
+}

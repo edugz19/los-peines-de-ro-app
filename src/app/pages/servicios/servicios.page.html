@@ -16,16 +16,17 @@
     <ion-row>
       <ion-col size="12">
         <ion-item>
-          <ion-label>Selecciona categoría</ion-label>
-          <ion-select 
+          <ion-label style="font-family: 'Quicksand', sans-serif; font-weight: bold;">Selecciona categoría</ion-label>
+          <ion-select
+            interface="popover"
             value="00" 
             (ionChange)="buscarPorCategoria($event)"
             id="select"
             cancelText="Cancelar"
             okText="Elegir"
           >
-            <ion-select-option value="00">Todos los servicios</ion-select-option>
-            <ion-select-option *ngFor="let categoria of categorias" value="{{categoria.id}}">
+            <ion-select-option value="00" style="font-family: 'Quicksand', sans-serif;">Todos los servicios</ion-select-option>
+            <ion-select-option *ngFor="let categoria of categorias" value="{{categoria.id}}" style="font-family: 'Quicksand', sans-serif;">
               {{ categoria.nombre | titlecase }}
             </ion-select-option>
           </ion-select>
