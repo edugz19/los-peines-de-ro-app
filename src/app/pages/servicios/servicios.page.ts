@@ -37,7 +37,7 @@ export class ServiciosPage implements OnInit {
   buscarServicio(event: any) {
     const valor = event.target.value.toLowerCase();
     const input = (document.getElementById('select') as HTMLSelectElement);
-    input.options.selectedIndex = 0;
+    input.value = '00';
 
     if (valor === '') {
       this.serviciosTemp = this.servicios;
@@ -70,8 +70,8 @@ export class ServiciosPage implements OnInit {
   }
 
   buscarPorCategoria(event: any) {
-    const valor = event.target.value;
-    const input = (document.getElementById('busqueda') as HTMLInputElement);
+    const valor = event.detail.value;
+    const input = (document.getElementById('search') as HTMLInputElement);
     input.value = '';
 
     if (valor === '00') {
@@ -93,12 +93,6 @@ export class ServiciosPage implements OnInit {
         }
       }
     }
-  }
-
-  resetInput() {
-    const input = (document.getElementById('busqueda') as HTMLInputElement);
-    input.value = '';
-    this.ngOnInit();
   }
 
   getHoras(min: number): string {

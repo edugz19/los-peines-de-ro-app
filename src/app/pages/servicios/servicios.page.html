@@ -4,32 +4,33 @@
   <ion-grid class="filtros">
     <ion-row>
       <ion-col size="12">
-        <ion-icon class="icon" name="search-outline"></ion-icon>
-        <input
-          type="text"
-          class="form-control"
-          id="busqueda"
+        <ion-searchbar
+          id="search"
+          cancelButtonText="Custom Cancel"
           placeholder="Busca un tratamiento..."
-          name="filtrado"
           (keyup)="buscarServicio($event)"
-        />
-        <ion-icon class="end" name="close-circle-outline" (click)="resetInput()"></ion-icon>
+        ></ion-searchbar>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col size="12">
-        <select 
-          class="form-select"
-          id="select"
-          aria-label="Selecciona categoría"
-          (change)="buscarPorCategoria($event)"
-        >
-          <option selected value="00">Selecciona categoría</option>
-          <option *ngFor="let categoria of categorias" value="{{categoria.id}}">
-            {{ categoria.nombre | titlecase }}
-          </option>
-        </select>
+        <ion-item>
+          <ion-label>Selecciona categoría</ion-label>
+          <ion-select 
+            value="00" 
+            (ionChange)="buscarPorCategoria($event)"
+            id="select"
+            cancelText="Cancelar"
+            okText="Elegir"
+          >
+            <ion-select-option value="00">Todos los servicios</ion-select-option>
+            <ion-select-option *ngFor="let categoria of categorias" value="{{categoria.id}}">
+              {{ categoria.nombre | titlecase }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -65,7 +66,9 @@
               </ion-row>
               <ion-row class="mb-2 mt-2">
                 <ion-col size="12" *ngIf="servicio.descripcion !== ''">
-                  <span class="info" (click)="openModal(servicio)">MAS INFORMACIÓN</span>
+                  <span class="info" (click)="openModal(servicio)"
+                    >MAS INFORMACIÓN</span
+                  >
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -98,7 +101,9 @@
               </ion-row>
               <ion-row class="mb-2 mt-2">
                 <ion-col size="12" *ngIf="servicio.descripcion !== ''">
-                  <span class="info" (click)="openModal(servicio)">MAS INFORMACIÓN</span>
+                  <span class="info" (click)="openModal(servicio)"
+                    >MAS INFORMACIÓN</span
+                  >
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -139,7 +144,9 @@
               </ion-row>
               <ion-row class="mb-2 mt-2">
                 <ion-col size="12" *ngIf="servicio.descripcion !== ''">
-                  <span class="info" (click)="openModal(servicio)">MAS INFORMACIÓN</span>
+                  <span class="info" (click)="openModal(servicio)"
+                    >MAS INFORMACIÓN</span
+                  >
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -172,7 +179,9 @@
               </ion-row>
               <ion-row class="mb-2 mt-2">
                 <ion-col size="12" *ngIf="servicio.descripcion !== ''">
-                  <span class="info" (click)="openModal(servicio)">MAS INFORMACIÓN</span>
+                  <span class="info" (click)="openModal(servicio)"
+                    >MAS INFORMACIÓN</span
+                  >
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -182,10 +191,15 @@
     </div>
   </div>
 
-  <div *ngIf="categoriasTemp.length === 0 && sinResultados === true" class="p-3">
+  <div
+    *ngIf="categoriasTemp.length === 0 && sinResultados === true"
+    class="p-3"
+  >
     <p class="text-center">No hay resultados con su búsqueda.</p>
-    <p class="text-center text-secondary">Intente con algunas de las siguientes palabras: corte, mechas, peinado, etc</p>
+    <p class="text-center text-secondary">
+      Intente con algunas de las siguientes palabras: corte, mechas, peinado,
+      etc
+    </p>
     <p class="text-center text-secondary"></p>
   </div>
-  
 </ion-content>
