@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CarouselItem } from '../../models/carouselItem.interface';
 import { CAROUSEL_DATA_ITEMS } from '../../constants/carousel.const';
+import { User } from 'firebase/auth';
+import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,10 +12,24 @@ import { CAROUSEL_DATA_ITEMS } from '../../constants/carousel.const';
 })
 export class HomePage implements OnInit {
 
-  public carouselData: CarouselItem[] = CAROUSEL_DATA_ITEMS;
-  constructor() { }
+  public usuario: User;
+  public nombre: string;
+  public isLogged: boolean;
 
-  ngOnInit() {
+  // public carouselData: CarouselItem[] = CAROUSEL_DATA_ITEMS;
+  constructor(
+    private authSvc: AuthService,
+    public router: Router
+  ) { }
+
+  async ngOnInit() {
+    this.usuario = await this.authSvc.getUsuarioActual();
+
+    if (this.usuario) {
+      this.nombre = this.usuario.displayName.split(' ')[0];
+      this.isLogged = true;
+      console.log(this.usuario);
+    }
   }
 
 }

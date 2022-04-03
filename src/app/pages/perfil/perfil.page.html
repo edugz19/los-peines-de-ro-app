@@ -17,6 +17,9 @@
     <ion-segment-button value="reservas">
       <ion-label>Reservas</ion-label>
     </ion-segment-button>
+    <ion-segment-button value="favoritos">
+      <ion-label>Favoritos</ion-label>
+    </ion-segment-button>
     <ion-segment-button value="perfil">
       <ion-label>Perfil</ion-label>
     </ion-segment-button>
@@ -47,6 +50,10 @@
 
   <div *ngIf="reservas === false && segment === 'reservas' && isLogged" class="sin-reservas">
     <ion-text>Aún no has reservado ninguna cita.</ion-text>
+  </div>
+
+  <div *ngIf="favoritos === false && segment === 'favoritos' && isLogged" class="sin-fav">
+    <ion-text>Aún no has añadido ningún servicio a favoritos.</ion-text>
   </div>
 
   <ion-card *ngIf="segment === 'perfil'">

@@ -23,6 +23,7 @@ export class PerfilPage implements OnInit {
   public nombre = new FormControl('');
   public phone = new FormControl('');
   public reservas: boolean;
+  public favoritos: boolean;
 
   constructor(
     public router: Router,
@@ -49,6 +50,7 @@ export class PerfilPage implements OnInit {
 
     this.segment = 'reservas';
     this.reservas = false;
+    this.favoritos = false;
   }
 
   segmentChanged(ev: any) {

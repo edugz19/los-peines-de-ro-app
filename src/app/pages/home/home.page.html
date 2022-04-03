@@ -7,6 +7,26 @@
         </div>
     </div> -->
 
+    <ion-grid >
+        <ion-row class="logo">
+            <ion-col>
+                <img src="assets/logo.png" alt="logo" style="width: 70%; margin: 20px 0;">
+            </ion-col>
+        </ion-row>
+        <ion-row class="question">
+            <ion-col size="12">
+                <h1>Hola<span *ngIf="isLogged"> {{ nombre | titlecase }}</span>, </h1>
+                <h1>¿Qué quieres hacer?</h1>
+            </ion-col>
+        </ion-row>
+        <ion-row class="boton">
+            <ion-col>
+                <ion-button expand="block" (click)="router.navigate(['/login'])" *ngIf="!isLogged">INICIAR SESIÓN</ion-button>
+                <ion-button expand="block" (click)="router.navigate(['/perfil'])" *ngIf="isLogged">VER TUS RESERVAS</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
     <ion-grid class="servicios">
         <ion-row>
             <ion-col>
