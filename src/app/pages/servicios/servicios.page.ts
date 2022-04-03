@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ActionSheetController } from '@ionic/angular';
 import { ServiciosService } from 'src/app/services/servicios/servicios.service';
 import { Categoria } from '../../models/categoria.interface';
 import { Servicio } from '../../models/servicio.interface';
@@ -21,7 +21,8 @@ export class ServiciosPage implements OnInit {
   constructor(
     private catSvc: CategoriasService,
     private servSvc: ServiciosService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    public actionSheetController: ActionSheetController
   ) {}
 
   ngOnInit() {
@@ -135,5 +136,33 @@ export class ServiciosPage implements OnInit {
     });
 
     return await modal.present();
+  }
+
+  async openActionSheet(servicio: Servicio) {
+    const actionSheet = this.actionSheetController.create({
+      header: servicio.nombre.toUpperCase(),
+      cssClass: 'my-css-class',
+      buttons: [
+        {
+          text: 'Reservar',
+          icon: 'bag-add'
+        },
+        {
+          text: 'Añadir a favoritos',
+          icon: 'heart-outline'
+        },
+        {
+          text: 'Ver más información',
+          icon: 'information-circle'
+        },
+        {
+          text: 'Volver atrás',
+          role: 'cancel',
+          icon: 'close'
+        }
+      ]
+    });
+
+    (await actionSheet).present();
   }
 }

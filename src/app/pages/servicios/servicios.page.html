@@ -47,10 +47,12 @@
           <ion-item
             class="ion-no-padding"
             *ngIf="categoria.id === servicio.categoria"
+            style="cursor: pointer;"
+            (click)="openActionSheet(servicio)"
           >
             <ion-grid class="ion-no-padding">
               <ion-row>
-                <ion-col size="9">
+                <ion-col size="10">
                   <strong style="margin: 0"
                     >{{ servicio.nombre | titlecase}}</strong
                   >
@@ -60,16 +62,6 @@
                 </ion-col>
                 <ion-col size="2" class="text-end">
                   <strong>{{ truncarPrecio(servicio.precio) }}€</strong>
-                </ion-col>
-                <ion-col size="1" class="text-end ml-4">
-                  <ion-icon class="tic" name="ellipse-outline"></ion-icon>
-                </ion-col>
-              </ion-row>
-              <ion-row class="mb-2 mt-2">
-                <ion-col size="12" *ngIf="servicio.descripcion !== ''">
-                  <span class="info" (click)="openModal(servicio)"
-                    >MAS INFORMACIÓN</span
-                  >
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -82,10 +74,12 @@
           <ion-item
             class="ion-no-padding"
             *ngIf="categoria.id === servicio.categoria"
+            style="cursor: pointer;"
+            (click)="openActionSheet(servicio)"
           >
             <ion-grid class="ion-no-padding">
               <ion-row>
-                <ion-col size="9">
+                <ion-col size="10">
                   <strong style="margin: 0"
                     >{{ servicio.nombre | titlecase}}</strong
                   >
@@ -95,16 +89,6 @@
                 </ion-col>
                 <ion-col size="2" class="text-end">
                   <strong>{{ truncarPrecio(servicio.precio) }}€</strong>
-                </ion-col>
-                <ion-col size="1" class="text-end">
-                  <ion-icon name="cart-outline"></ion-icon>
-                </ion-col>
-              </ion-row>
-              <ion-row class="mb-2 mt-2">
-                <ion-col size="12" *ngIf="servicio.descripcion !== ''">
-                  <span class="info" (click)="openModal(servicio)"
-                    >MAS INFORMACIÓN</span
-                  >
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -125,10 +109,12 @@
           <ion-item
             class="ion-no-padding"
             *ngIf="categoria.id === servicio.categoria"
+            style="cursor: pointer;"
+            (click)="openActionSheet(servicio)"
           >
             <ion-grid class="ion-no-padding">
               <ion-row>
-                <ion-col size="9">
+                <ion-col size="10">
                   <strong style="margin: 0"
                     >{{ servicio.nombre | titlecase}}</strong
                   >
@@ -138,16 +124,6 @@
                 </ion-col>
                 <ion-col size="2" class="text-end">
                   <strong>{{ truncarPrecio(servicio.precio) }}€</strong>
-                </ion-col>
-                <ion-col size="1" class="text-end">
-                  <ion-icon name="cart-outline"></ion-icon>
-                </ion-col>
-              </ion-row>
-              <ion-row class="mb-2 mt-2">
-                <ion-col size="12" *ngIf="servicio.descripcion !== ''">
-                  <span class="info" (click)="openModal(servicio)"
-                    >MAS INFORMACIÓN</span
-                  >
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -160,10 +136,12 @@
           <ion-item
             class="ion-no-padding"
             *ngIf="categoria.id === servicio.categoria"
+            style="cursor: pointer;"
+            (click)="openActionSheet(servicio)"
           >
             <ion-grid class="ion-no-padding">
               <ion-row>
-                <ion-col size="9">
+                <ion-col size="10">
                   <strong style="margin: 0"
                     >{{ servicio.nombre | titlecase}}</strong
                   >
@@ -173,16 +151,6 @@
                 </ion-col>
                 <ion-col size="2" class="text-end">
                   <strong>{{ truncarPrecio(servicio.precio) }}€</strong>
-                </ion-col>
-                <ion-col size="1" class="text-end">
-                  <ion-icon name="cart-outline"></ion-icon>
-                </ion-col>
-              </ion-row>
-              <ion-row class="mb-2 mt-2">
-                <ion-col size="12" *ngIf="servicio.descripcion !== ''">
-                  <span class="info" (click)="openModal(servicio)"
-                    >MAS INFORMACIÓN</span
-                  >
                 </ion-col>
               </ion-row>
             </ion-grid>

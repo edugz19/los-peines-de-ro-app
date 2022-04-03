@@ -76,6 +76,12 @@ export class AuthService {
   //   return await (await this.afAuth.currentUser).updatePhoneNumber()
   // }
 
+  // async modificarAvatar() {
+  //   return (await this.afAuth.currentUser).updateProfile({
+  //     displayName:
+  //   });
+  // }
+
   async presentToast() {
     const toast = await this.toast.create({
       message: 'El correo electrónico o la contraseña son incorrectos',
