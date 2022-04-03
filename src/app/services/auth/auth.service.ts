@@ -76,11 +76,11 @@ export class AuthService {
   //   return await (await this.afAuth.currentUser).updatePhoneNumber()
   // }
 
-  // async modificarAvatar() {
-  //   return (await this.afAuth.currentUser).updateProfile({
-  //     displayName:
-  //   });
-  // }
+  async modificarAvatar(url: string) {
+    return (await this.afAuth.currentUser).updateProfile({
+      photoURL: url
+    });
+  }
 
   async presentToast() {
     const toast = await this.toast.create({

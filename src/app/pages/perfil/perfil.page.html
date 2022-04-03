@@ -1,8 +1,10 @@
 <ion-header style="border-bottom: 1px solid rgb(248, 248, 248);" *ngIf="isLogged">
   <div class="header">
     <ion-avatar *ngIf="usuario.photoURL !== null">
-      <img [src]="usuario.photoURL">
+      <img [src]="usuario.photoURL" (click)="inputImageProfile.click()">
     </ion-avatar>
+
+    <input type="file" hidden #inputImageProfile (change)="handleImage($event)">
 
     <ion-avatar *ngIf="usuario.photoURL === null">
         <img src="assets/usuario.png">

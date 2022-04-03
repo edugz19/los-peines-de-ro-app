@@ -4,6 +4,8 @@ import { AuthService } from '../../services/auth/auth.service';
 import { User } from 'firebase/auth';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
+import { AngularFireStorageReference, AngularFireUploadTask, AngularFireStorage } from '@angular/fire/compat/storage';
+import { FileI } from '../../models/file.interface';
 
 @Component({
   selector: 'app-perfil',
@@ -11,6 +13,10 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
+  public ref: AngularFireStorageReference;
+  public afTask: AngularFireUploadTask;
+  public file: FileI;
+  public url: string;
   public usuario: User;
   public isLogged = false;
   public segment: string;
@@ -21,7 +27,8 @@ export class PerfilPage implements OnInit {
   constructor(
     public router: Router,
     private authSvc: AuthService,
-    public toast: ToastController
+    public toast: ToastController,
+    public storage: AngularFireStorage
     ) { }
 
   async ngOnInit() {
@@ -71,6 +78,17 @@ export class PerfilPage implements OnInit {
 
       await toast.present();
     }
+  }
+
+  handleImage(ev: any) {
+    this.file = ev.target.files[0];
+    const filePath = `images/${this.file.name}`;
+    this.ref = this.storage.ref(filePath);
+    this.afTask = this.ref.put(this.file);
+
+    this.ref.getDownloadURL().subscribe( url => {
+      this.authSvc.modificarAvatar(url);
+    });
   }
 
   login() {
