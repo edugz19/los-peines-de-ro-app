@@ -27,33 +27,44 @@
 </ion-header>
 
 <ion-content>
-  <div class="no-logged" *ngIf="!isLogged">
-    <ion-card >
-      <ion-card-content>
-        <p>Inicie sesión en su perfil para crear citas y gestionar tus reservas.</p>
-        <ion-button 
-          class="mt-4"
-          expand="block"
-          (click)="login()"
-        >Acceder</ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
-
   <ion-grid *ngIf="segment === 'reservas' && isLogged">
     <ion-row>
       <ion-col></ion-col>
     </ion-row>
-
-    
   </ion-grid>
 
   <div *ngIf="reservas === false && segment === 'reservas' && isLogged" class="sin-reservas">
     <ion-text>Aún no has reservado ninguna cita.</ion-text>
   </div>
 
-  <div *ngIf="favoritos === false && segment === 'favoritos' && isLogged" class="sin-fav">
+  <div *ngIf="arrayFav.length === 0 && segment === 'favoritos' && isLogged" class="sin-fav">
     <ion-text>Aún no has añadido ningún servicio a favoritos.</ion-text>
+  </div>
+
+  <div *ngIf="arrayFav.length > 0 && segment === 'favoritos' && isLogged" class="fav-list m-2" >
+    <div *ngFor="let servicio of servicios" class="mt-3">
+      <ion-item
+        class="ion-no-padding"
+        style="cursor: pointer;"
+        (click)="openActionSheet(servicio)"
+      >
+        <ion-grid class="ion-no-padding">
+          <ion-row>
+            <ion-col size="10">
+              <strong style="margin: 0"
+                >{{ servicio.nombre | titlecase}}</strong
+              >
+              <span class="duracion text-secondary"
+                >{{ getHoras(servicio.duracion) }}</span
+              >
+            </ion-col>
+            <ion-col size="2" class="text-end">
+              <strong>{{ truncarPrecio(servicio.precio) }}€</strong>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </div>
   </div>
 
   <ion-card *ngIf="segment === 'perfil'">
@@ -97,5 +108,18 @@
 
     </ion-card-content>
   </ion-card>
+
+  <div class="no-logged" *ngIf="!isLogged">
+    <ion-card >
+      <ion-card-content>
+        <p>Inicie sesión en su perfil para crear citas y gestionar tus reservas.</p>
+        <ion-button 
+          class="mt-4"
+          expand="block"
+          (click)="login()"
+        >Acceder</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
   
 </ion-content>

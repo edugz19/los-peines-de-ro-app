@@ -11,4 +11,8 @@ export class TabsComponent implements OnInit {
 
   ngOnInit() {}
 
+  irPerfil() {
+    window.location.href = 'perfil';
+  }
+
 }
