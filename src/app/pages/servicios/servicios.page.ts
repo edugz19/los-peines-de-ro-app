@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, ActionSheetController } from '@ionic/angular';
+import { ModalController, ActionSheetController, LoadingController, ToastController } from '@ionic/angular';
 import { ServiciosService } from 'src/app/services/servicios/servicios.service';
 import { Categoria } from '../../models/categoria.interface';
 import { Servicio } from '../../models/servicio.interface';
 import { CategoriasService } from '../../services/categorias/categorias.service';
 import { InfoModalPage } from '../info-modal/info-modal.page';
+import { FavoritosService } from '../../services/favoritos/favoritos.service';
+import { User } from 'firebase/auth';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-servicios',
@@ -12,20 +15,39 @@ import { InfoModalPage } from '../info-modal/info-modal.page';
   styleUrls: ['./servicios.page.scss'],
 })
 export class ServiciosPage implements OnInit {
+  usuario: User;
   categorias: Categoria[] = [];
   servicios: Servicio[] = [];
   serviciosTemp: Servicio[] = [];
   categoriasTemp: Categoria[] = [];
   sinResultados: boolean;
+  isLogged: boolean;
+  arrayFav: Array<string>;
 
   constructor(
     private catSvc: CategoriasService,
     private servSvc: ServiciosService,
+    private favSvc: FavoritosService,
     public modalController: ModalController,
-    public actionSheetController: ActionSheetController
+    public actionSheetController: ActionSheetController,
+    public loadingController: LoadingController,
+    public authSvc: AuthService,
+    public toastController: ToastController
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.presentLoading();
+    this.usuario = await this.authSvc.getUsuarioActual();
+
+    if (this.usuario) {
+      this.isLogged = true;
+      this.favSvc.getFavoritosconUID(this.usuario.uid).subscribe( favoritos => {
+        this.arrayFav = favoritos.servicios;
+      });
+    } else {
+      this.isLogged = false;
+    }
+
     this.catSvc
       .getCategorias()
       .subscribe((categorias) => (this.categorias = categorias));
@@ -139,6 +161,14 @@ export class ServiciosPage implements OnInit {
   }
 
   async openActionSheet(servicio: Servicio) {
+    let icono = 'heart-outline';
+    let texto = 'Añadir a favoritos';
+
+    if (this.arrayFav.indexOf(servicio.id) !== -1) {
+      icono = 'heart';
+      texto = 'Quitar de favoritos';
+    }
+
     const actionSheet = this.actionSheetController.create({
       header: servicio.nombre.toUpperCase(),
       cssClass: 'my-css-class',
@@ -148,8 +178,24 @@ export class ServiciosPage implements OnInit {
           icon: 'bag-add'
         },
         {
-          text: 'Añadir a favoritos',
-          icon: 'heart-outline'
+          text: texto,
+          icon: icono,
+          handler: () => {
+            if (this.isLogged) {
+              const existe = this.arrayFav.indexOf(servicio.id);
+
+              if (existe === -1) {
+                this.arrayFav.push(servicio.id);
+                this.favSvc.updateFavorito(this.arrayFav, this.usuario.uid);
+              } else {
+                const array = this.arrayFav.filter((item) => item !== servicio.id);
+                this.favSvc.updateFavorito(array, this.usuario.uid);
+              }
+
+            } else {
+              this.favToast();
+            }
+          }
         },
         {
           text: 'Ver más información',
@@ -164,5 +210,23 @@ export class ServiciosPage implements OnInit {
     });
 
     (await actionSheet).present();
+  }
+
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Please wait...',
+      duration: 2000
+    });
+    await loading.present();
+  }
+
+  async favToast() {
+    const toast = this.toastController.create({
+      message: 'Para poder añadir servicios a tus favoritos debes iniciar sesión.',
+      duration: 2000,
+      color: 'danger'
+    });
+
+    (await toast).present();
   }
 }
