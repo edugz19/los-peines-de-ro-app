@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { comprobarPass } from '../../helpers/comprobarPass.validator';
+import { FavoritosService } from '../../services/favoritos/favoritos.service';
 
 @Component({
   selector: 'app-registro',
@@ -27,6 +28,7 @@ export class RegistroPage implements OnInit {
 
   constructor(
     private authSvc: AuthService,
+    private favSvc: FavoritosService,
     public router: Router,
     private fb: FormBuilder
   ) {}
@@ -43,6 +45,7 @@ export class RegistroPage implements OnInit {
       if (usuario) {
         this.authSvc.modificarNombre(nombre);
         this.router.navigate(['/verificar-email']);
+        this.favSvc.createFavoritos(usuario.user.uid);
       }
 
     } catch(error) {

@@ -164,9 +164,11 @@ export class ServiciosPage implements OnInit {
     let icono = 'heart-outline';
     let texto = 'Añadir a favoritos';
 
-    if (this.arrayFav.indexOf(servicio.id) !== -1) {
-      icono = 'heart';
-      texto = 'Quitar de favoritos';
+    if (this.isLogged) {
+      if (this.arrayFav.indexOf(servicio.id) !== -1) {
+        icono = 'heart';
+        texto = 'Quitar de favoritos';
+      }
     }
 
     const actionSheet = this.actionSheetController.create({
@@ -180,6 +182,7 @@ export class ServiciosPage implements OnInit {
         {
           text: texto,
           icon: icono,
+          cssClass: 'fav',
           handler: () => {
             if (this.isLogged) {
               const existe = this.arrayFav.indexOf(servicio.id);
@@ -187,13 +190,21 @@ export class ServiciosPage implements OnInit {
               if (existe === -1) {
                 this.arrayFav.push(servicio.id);
                 this.favSvc.updateFavorito(this.arrayFav, this.usuario.uid);
+                const mensaje = 'Servicio añadido a favoritos correctamente';
+                const color = 'success';
+                this.favToast(mensaje, color);
               } else {
                 const array = this.arrayFav.filter((item) => item !== servicio.id);
                 this.favSvc.updateFavorito(array, this.usuario.uid);
+                const mensaje = 'Servicio eliminado de favoritos correctamente';
+                const color = 'warning';
+                this.favToast(mensaje, color);
               }
 
             } else {
-              this.favToast();
+              const mensaje = 'Para poder añadir servicios a tus favoritos debes iniciar sesión.';
+              const color = 'danger';
+              this.favToast(mensaje, color);
             }
           }
         },
@@ -220,11 +231,11 @@ export class ServiciosPage implements OnInit {
     await loading.present();
   }
 
-  async favToast() {
+  async favToast(mensaje: string, color: string) {
     const toast = this.toastController.create({
-      message: 'Para poder añadir servicios a tus favoritos debes iniciar sesión.',
+      message: mensaje,
       duration: 2000,
-      color: 'danger'
+      color
     });
 
     (await toast).present();

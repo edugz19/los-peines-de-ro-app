@@ -28,6 +28,13 @@ export class FavoritosService {
     return this.favoritos;
   }
 
+  createFavoritos(uid: string) {
+    this.db.collection('favoritos').doc(uid).set({
+      uid,
+      servicios: []
+    });
+  }
+
   updateFavorito(array: Array<string>, uid: string) {
     this.db.collection('favoritos').doc(uid).update({
       uid,

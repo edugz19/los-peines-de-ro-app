@@ -49,11 +49,13 @@ export class PerfilPage implements OnInit, OnDestroy {
     if (this.usuario) {
       if (this.usuario.emailVerified === true) {
         this.isLogged = true;
-        this.favSvc.getFavoritosconUID(this.usuario.uid)
-          .pipe(take(1))
-          .subscribe( favoritos => {
+        this.favSvc.getFavoritosconUID(this.usuario.uid).subscribe( favoritos =>{
+          if (favoritos === undefined) {
+            this.favSvc.createFavoritos(this.usuario.uid);
+          } else {
             this.arrayFav = favoritos.servicios;
-          });
+          }
+        });
 
         this.sub = this.servSvc.getServicios()
           .pipe(take(1))
@@ -194,6 +196,9 @@ export class PerfilPage implements OnInit, OnDestroy {
                 this.arrayFav = array;
                 const arrayServ = this.servicios.filter((item) => item.id !== servicio.id);
                 this.servicios = arrayServ;
+                const mensaje = 'Servicio eliminado de favoritos correctamente';
+                const color = 'warning';
+                this.favToast(mensaje, color);
               }
             }
           }
@@ -211,6 +216,16 @@ export class PerfilPage implements OnInit, OnDestroy {
     });
 
     (await actionSheet).present();
+  }
+
+  async favToast(mensaje: string, color: string) {
+    const toast = this.toast.create({
+      message: mensaje,
+      duration: 2000,
+      color
+    });
+
+    (await toast).present();
   }
 
 }
