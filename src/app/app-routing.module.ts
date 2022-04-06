@@ -24,10 +24,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'info-modal',
-    loadChildren: () => import('./pages/info-modal/info-modal.module').then( m => m.InfoModalPageModule)
-  },
-  {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },

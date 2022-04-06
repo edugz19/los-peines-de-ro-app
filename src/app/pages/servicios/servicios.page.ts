@@ -4,10 +4,10 @@ import { ServiciosService } from 'src/app/services/servicios/servicios.service';
 import { Categoria } from '../../models/categoria.interface';
 import { Servicio } from '../../models/servicio.interface';
 import { CategoriasService } from '../../services/categorias/categorias.service';
-import { InfoModalPage } from '../info-modal/info-modal.page';
 import { FavoritosService } from '../../services/favoritos/favoritos.service';
 import { User } from 'firebase/auth';
 import { AuthService } from '../../services/auth/auth.service';
+import { CalendarComponent } from '../../components/calendar/calendar.component';
 
 @Component({
   selector: 'app-servicios',
@@ -145,15 +145,12 @@ export class ServiciosPage implements OnInit {
     }
   }
 
-  async openModal(servicio: Servicio) {
+  async openReservaModal(servicio: Servicio) {
     const modal = await this.modalController.create({
-      component: InfoModalPage,
+      component: CalendarComponent,
       cssClass: 'css-modal',
       componentProps: {
-        servicio: servicio.nombre,
-        descripcion: servicio.descripcion,
-        precio: servicio.precio,
-        duracion: servicio.duracion
+        servicio
       }
     });
 
@@ -177,7 +174,10 @@ export class ServiciosPage implements OnInit {
       buttons: [
         {
           text: 'Reservar',
-          icon: 'bag-add'
+          icon: 'bag-add',
+          handler: () => {
+            this.openReservaModal(servicio);
+          }
         },
         {
           text: texto,

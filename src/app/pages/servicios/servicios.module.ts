@@ -9,6 +9,7 @@ import { ServiciosPageRoutingModule } from './servicios-routing.module';
 import { ServiciosPage } from './servicios.page';
 import { FilterPipe } from 'src/app/pipes/filter.pipe';
 import { SelectPipe } from '../../pipes/select.pipe';
+import { CalendarComponent } from '../../components/calendar/calendar.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { SelectPipe } from '../../pipes/select.pipe';
   declarations: [
     ServiciosPage,
     FilterPipe,
-    SelectPipe
+    SelectPipe,
+    CalendarComponent
   ]
 })
 export class ServiciosPageModule {}

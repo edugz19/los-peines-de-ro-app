@@ -1,0 +1,42 @@
+<ion-grid>
+  <ion-row>
+    <ion-col size="12">
+      <h4 style="text-align: center;">ELIGE LA FECHA Y LA HORA</h4>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12">
+      <ion-datetime 
+        locale="es-ES"
+        [min]="fechaActual"
+        firstDayOfWeek="1"
+        presentation="date"
+      ></ion-datetime>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" style="position: absolute; bottom: 0;">
+        <ion-button style="width: 48%;" color="danger" (click)="volver()">Volver Atrás</ion-button>
+        <ion-button style="width: 48%;" color="primary" (click)="continuar()">Continuar</ion-button>
+    </ion-col>
+  </ion-row>
+  <hr>
+  <!-- <ion-row>
+    <ion-col size="12">
+      <div class="horario">
+        <img src="assets/icon/no-disponible.png" alt="">
+        <span style="text-align: center;">Lo sentimos, no hay disponibilidad para esta fecha. Prueba con otra.</span>
+      </div>
+    </ion-col>
+  </ion-row> -->
+  <ion-row>
+    <ion-col size="12">
+      <ion-item>
+        <ion-label>Selecciona la hora</ion-label>
+        <ion-select placeholder="Selecciona la hora">
+          <ion-select-option *ngFor="let item of horario" [value]="item">{{ item }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>

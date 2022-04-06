@@ -17,7 +17,7 @@ import { take, takeWhile } from 'rxjs/operators';
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
 })
-export class PerfilPage implements OnInit, OnDestroy {
+export class PerfilPage implements OnInit {
   public ref: AngularFireStorageReference;
   public afTask: AngularFireUploadTask;
   public file: FileI;
@@ -31,7 +31,6 @@ export class PerfilPage implements OnInit, OnDestroy {
   public reservas: boolean;
   public arrayFav: Array<string> = [];
   public servicios: Servicio[] = [];
-  private sub: Subscription;
 
   constructor(
     public router: Router,
@@ -57,7 +56,7 @@ export class PerfilPage implements OnInit, OnDestroy {
           }
         });
 
-        this.sub = this.servSvc.getServicios()
+        this.servSvc.getServicios()
           .pipe(take(1))
           .subscribe( servicios => {
             for (const servicio of servicios) {
@@ -79,11 +78,6 @@ export class PerfilPage implements OnInit, OnDestroy {
 
     this.segment = 'reservas';
     this.reservas = false;
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-    console.log('Desuscrito');
   }
 
   segmentChanged(ev: any) {
