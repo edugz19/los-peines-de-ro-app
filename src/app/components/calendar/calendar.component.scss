@@ -1,6 +1,5 @@
 * {
     font-family: 'Quicksand', sans-serif;
-    font-weight: bold;
 }
 
 .horario {
@@ -14,4 +13,13 @@
 .horario img {
     width: 50%;
     margin-bottom: 10px;
+}
+
+.info-hora {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
 }

@@ -16,6 +16,8 @@ export class CalendarComponent {
 
   public horario: Array<string> = HORARIO;
   public fechaActual: string;
+  public hora = '';
+  public horaFin: string;
 
   constructor(public modalController: ModalController) {
     this.fechaActual = moment().add(1,'d').format('YYYY-MM-DD');
@@ -38,6 +40,11 @@ export class CalendarComponent {
 
   continuar() {
     console.log(this.datetime.confirm());
+  }
+
+  cambiarHora(ev: any, duracion: number) {
+    this.hora = ev.target.value;
+    this.horaFin = moment(this.hora, 'HH:mm').add(duracion, 'm').format('HH:mm');
   }
 
 }
