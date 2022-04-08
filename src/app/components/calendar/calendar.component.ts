@@ -1,27 +1,44 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IonDatetime, ModalController } from '@ionic/angular';
 import { Servicio } from 'src/app/models/servicio.interface';
 import * as moment from 'moment';
 import { HORARIO } from '../../constants/horario.const';
+import { Reserva } from 'src/app/models/reserva.interface';
+import { ReservasService } from '../../services/reservas/reservas.service';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
 })
-export class CalendarComponent {
-
+export class CalendarComponent implements OnInit, OnDestroy {
   @ViewChild(IonDatetime, { static: true }) datetime: IonDatetime;
   @Input() servicio: Servicio;
 
   public horario: Array<string> = HORARIO;
+  public horarioInvalido: Array<string> = [];
+  public horarioReal: Array<string | any> = [];
   public fechaActual: string;
   public hora = '';
   public horaFin: string;
+  public esDiaValido = false;
+  public reservas: Reserva[] = [];
+  public select: any;
 
-  constructor(public modalController: ModalController) {
-    this.fechaActual = moment().add(1,'d').format('YYYY-MM-DD');
-    console.log(this.fechaActual);
+  constructor(
+    public modalController: ModalController,
+    private reservaSvc: ReservasService
+  ) {}
+
+  ngOnInit(): void {
+    this.fechaActual = moment().add(1, 'd').format('YYYY-MM-DD');
+    this.reservaSvc.getReservas().subscribe((reservas) => {
+      this.reservas = reservas;
+    });
+  }
+
+  ngOnDestroy(): void {
+    console.log('Destruido');
   }
 
   truncarPrecio(precio: number): number {
@@ -34,7 +51,7 @@ export class CalendarComponent {
 
   volver() {
     this.modalController.dismiss({
-      dismissed: true
+      dismissed: true,
     });
   }
 
@@ -44,7 +61,121 @@ export class CalendarComponent {
 
   cambiarHora(ev: any, duracion: number) {
     this.hora = ev.target.value;
-    this.horaFin = moment(this.hora, 'HH:mm').add(duracion, 'm').format('HH:mm');
+    this.horaFin = moment(this.hora, 'HH:mm')
+      .add(duracion, 'm')
+      .format('HH:mm');
   }
 
+  comprobarFecha(ev: any, duracion: number) {
+    const fecha = moment(ev.detail.value);
+    const fechaFormateada = fecha.format('YYYY-MM-DD');
+    const dia = moment.weekdays(fecha.day());
+    this.select = null;
+    this.horarioReal = [];
+    const array = [];
+
+    if (dia === 'Saturday' || dia === 'Sunday') {
+      this.esDiaValido = false;
+    } else {
+      for (const item of this.reservas) {
+        if (item.fecha === fechaFormateada) {
+          const x = this.horario.indexOf(item.horaInicio);
+          const y = this.horario.indexOf(item.horaFin);
+
+          for (let i = 0; i < this.horario.length; i++) {
+            const horaFin = moment(this.horario[i], 'HH:mm')
+              .add(duracion, 'm')
+              .format('HH:mm');
+            const horaValida = this.comprobarHoraValidaDiaConCitas(
+              this.horario[i],
+              horaFin,
+              item.horaInicio,
+              item.horaFin
+            );
+
+            // console.log(this.horario[i], horaFin, horaValida);
+
+            if ((i > x && i < y) || !horaValida) {
+              array.push(this.horario[i]);
+            }
+          }
+        } else {
+          // eslint-disable-next-line @typescript-eslint/prefer-for-of
+          for (let i = 0; i < this.horario.length; i++) {
+            const horaFin = moment(this.horario[i], 'HH:mm')
+              .add(duracion, 'm')
+              .format('HH:mm');
+            const horaValida = this.comprobarHoraValidaDiaSinCitas(
+              this.horario[i],
+              horaFin
+            );
+
+            // console.log(this.horario[i], horaFin, horaValida);
+
+            if (!horaValida) {
+              array.push(this.horario[i]);
+            }
+          }
+        }
+      }
+
+      const dataArr = new Set(array);
+      this.horarioInvalido = [...dataArr];
+      // console.log(this.horarioInvalido);
+
+      const newArray = this.horario.concat(this.horarioInvalido);
+
+      // console.log(newArray);
+
+      const uniqueValues = ar => [...new Set(
+        ar.filter(el => ar.filter(el2 => el2===el).length === 1)
+      )];
+
+      this.horarioReal = uniqueValues(newArray);
+
+      // console.log(this.horarioReal);
+
+      if (this.horarioReal.length > 0) {
+        this.esDiaValido = true;
+      }
+    }
+  }
+
+  comprobarHoraValidaDiaConCitas(
+    horaInicio: string,
+    horaFin: string,
+    horaInicioCitaExistente: string,
+    horaFinCitaExistente: string
+  ): boolean {
+    if (
+      (moment(horaInicio, 'HH:mm') >= moment('09:00', 'HH:mm') &&
+        moment(horaFin, 'HH:mm') <= moment('14:00', 'HH:mm')) ||
+      (moment(horaInicio, 'HH:mm') >= moment('16:00', 'HH:mm') &&
+        moment(horaFin, 'HH:mm') <= moment('20:00', 'HH:mm'))
+    ) {
+      if (
+        moment(horaFin, 'HH:mm') <= moment(horaInicioCitaExistente, 'HH:mm') ||
+        moment(horaInicio, 'HH:mm') >= moment(horaFinCitaExistente, 'HH:mm')
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  comprobarHoraValidaDiaSinCitas(horaInicio: string, horaFin: string): boolean {
+    if (
+      (moment(horaInicio, 'HH:mm') >= moment('09:00', 'HH:mm') &&
+        moment(horaFin, 'HH:mm') <= moment('14:00', 'HH:mm')) ||
+      (moment(horaInicio, 'HH:mm') >= moment('16:00', 'HH:mm') &&
+        moment(horaFin, 'HH:mm') <= moment('20:00', 'HH:mm'))
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

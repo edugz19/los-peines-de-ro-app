@@ -15,6 +15,7 @@ export class HomePage implements OnInit {
   public usuario: User;
   public nombre: string;
   public isLogged: boolean;
+  public modoOscuro: boolean;
 
   // public carouselData: CarouselItem[] = CAROUSEL_DATA_ITEMS;
   constructor(
@@ -30,6 +31,9 @@ export class HomePage implements OnInit {
       this.isLogged = true;
       console.log(this.usuario);
     }
+
+    this.modoOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    console.log(this.modoOscuro);
   }
 
 }

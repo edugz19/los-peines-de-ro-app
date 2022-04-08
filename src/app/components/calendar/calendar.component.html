@@ -2,38 +2,43 @@
 
   <ion-row>
     <ion-col size="12">
-      <h4 style="text-align: center;">ELIGE LA FECHA Y LA HORA</h4>
+      <h4 style="text-align: center; font-weight: bold;">ELIGE LA FECHA Y LA HORA</h4>
     </ion-col>
   </ion-row>
 
   <ion-row>
-    <ion-col size="12">
+    <ion-col size="12" class="calendario">
       <ion-datetime 
         locale="es-ES"
         [min]="fechaActual"
         firstDayOfWeek="1"
         presentation="date"
+        (ionChange)="comprobarFecha($event, servicio.duracion)"
       ></ion-datetime>
     </ion-col>
   </ion-row>
 
   <hr>
 
-  <!-- <ion-row>
+  <ion-row *ngIf="!esDiaValido" style="max-width: 350px">
     <ion-col size="12">
       <div class="horario">
         <img src="assets/icon/no-disponible.png" alt="">
         <span style="text-align: center;">Lo sentimos, no hay disponibilidad para esta fecha. Prueba con otra.</span>
       </div>
     </ion-col>
-  </ion-row> -->
+  </ion-row>
 
-  <ion-row>
+  <ion-row *ngIf="esDiaValido" style="max-width: 350px">
     <ion-col size="12">
       <ion-item>
         <ion-label>Selecciona la hora</ion-label>
-        <ion-select placeholder="Selecciona la hora" (ionChange)="cambiarHora($event, servicio.duracion)">
-          <ion-select-option *ngFor="let item of horario" [value]="item">{{ item }}</ion-select-option>
+        <ion-select 
+          placeholder="Selecciona la hora" 
+          (ionChange)="cambiarHora($event, servicio.duracion)"
+          [(ngModel)]="select"
+        >
+          <ion-select-option *ngFor="let item of horarioReal" [value]="item">{{ item }}</ion-select-option>
         </ion-select>
       </ion-item>
       <div *ngIf="hora === ''" class="info-hora">
@@ -46,8 +51,8 @@
     </ion-col>
   </ion-row>
 
-  <ion-row>
-    <ion-col size="12" style="position: absolute; bottom: 0;">
+  <ion-row style="max-width: 350px; position: absolute; bottom: 0; width: 100%;">
+    <ion-col size="12" style="width: 100%;">
         <ion-button style="width: 48%; font-weight: bold;" color="danger" (click)="volver()">Volver Atrás</ion-button>
         <ion-button 
           style="width: 48%; font-weight: bold;" 

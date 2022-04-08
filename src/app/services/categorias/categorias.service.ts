@@ -28,7 +28,7 @@ export class CategoriasService {
     return this.categorias;
   }
 
-  getCategoriaconID(id) {
+  getCategoriaconID(id: string) {
     return this.db.collection<Categoria>('categorias').doc(id).valueChanges();
   }
 }

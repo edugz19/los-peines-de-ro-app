@@ -10,7 +10,8 @@
     <ion-grid >
         <ion-row class="logo">
             <ion-col>
-                <img src="assets/logo.png" alt="logo" style="width: 70%; margin: 20px 0;">
+                <img *ngIf="!modoOscuro" src="assets/logo.png" alt="logo" style="width: 70%; margin: 20px 0;">
+                <img *ngIf="modoOscuro" src="assets/logo-dark.png" alt="logo" style="width: 70%; margin: 20px 0;">
             </ion-col>
         </ion-row>
         <ion-row class="question">
