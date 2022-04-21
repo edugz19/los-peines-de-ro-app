@@ -38,9 +38,6 @@ export class PerfilPage implements OnInit {
   constructor(
     public router: Router,
     private authSvc: AuthService,
-    private servSvc: ServiciosService,
-    private favSvc: FavoritosService,
-    private resSvc: ReservasService,
     public toast: ToastController,
     public storage: AngularFireStorage,
     public actionSheetController: ActionSheetController
@@ -52,34 +49,6 @@ export class PerfilPage implements OnInit {
     if (this.usuario) {
       if (this.usuario.emailVerified === true) {
         this.isLogged = true;
-        this.favSvc.getFavoritosconUID(this.usuario.uid).subscribe( favoritos =>{
-          if (favoritos === undefined) {
-            this.favSvc.createFavoritos(this.usuario.uid);
-          } else {
-            this.arrayFav = favoritos.servicios;
-          }
-        });
-
-        this.servSvc.getServicios()
-          .pipe(take(1))
-          .subscribe( servicios => {
-            for (const servicio of servicios) {
-              if (this.arrayFav.indexOf(servicio.id) !== -1) {
-                this.servicios.push(servicio);
-              }
-            }
-          });
-
-        this.resSvc.getReservas()
-          .pipe(take(1))
-          .subscribe( reservas => {
-            for (const res of reservas) {
-              if (res.uid === this.usuario.uid) {
-                this.arrayReservas.push(res);
-                // console.log(this.arrayReservas);
-              }
-            }
-          });
 
         console.log(this.usuario);
 
@@ -145,102 +114,6 @@ export class PerfilPage implements OnInit {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  getHoras(min: number): string {
-    let duracion: string;
-
-    if (min >= 60) {
-      const h = Math.floor(min / 60);
-
-      if (min % 60 === 0) {
-        duracion = `${h}h`;
-      } else {
-        const m = min % 60;
-        duracion = `${h}h ${m}min`;
-      }
-    } else {
-      duracion = `${min}min`;
-    }
-
-    return duracion;
-  }
-
-  truncarPrecio(precio: number): number {
-    if (precio % 1 === 0) {
-      return Math.trunc(precio);
-    } else {
-      return precio;
-    }
-  }
-
-  async openActionSheet(servicio: Servicio) {
-    let icono = 'heart-outline';
-    let texto = 'Añadir a favoritos';
-
-    if (this.arrayFav.indexOf(servicio.id) !== -1) {
-      icono = 'heart';
-      texto = 'Quitar de favoritos';
-    }
-
-    const actionSheet = this.actionSheetController.create({
-      header: servicio.nombre.toUpperCase(),
-      cssClass: 'my-css-class',
-      buttons: [
-        {
-          text: 'Reservar',
-          icon: 'bag-add'
-        },
-        {
-          text: texto,
-          icon: icono,
-          handler: () => {
-            if (this.isLogged) {
-              const existe = this.arrayFav.indexOf(servicio.id);
-
-              if (existe !== -1) {
-                const array = this.arrayFav.filter((item) => item !== servicio.id);
-                this.favSvc.updateFavorito(array, this.usuario.uid);
-                this.arrayFav = array;
-                const arrayServ = this.servicios.filter((item) => item.id !== servicio.id);
-                this.servicios = arrayServ;
-                const mensaje = 'Servicio eliminado de favoritos correctamente';
-                const color = 'warning';
-                this.favToast(mensaje, color);
-              }
-            }
-          }
-        },
-        {
-          text: 'Ver más información',
-          icon: 'information-circle'
-        },
-        {
-          text: 'Volver atrás',
-          role: 'cancel',
-          icon: 'close'
-        }
-      ]
-    });
-
-    (await actionSheet).present();
-  }
-
-  async favToast(mensaje: string, color: string) {
-    const toast = this.toast.create({
-      message: mensaje,
-      duration: 2000,
-      color
-    });
-
-    (await toast).present();
-  }
-
-  formatearFecha(fecha: string, horaInicio: string) {
-    moment.locale('es');
-
-    const nuevaFecha = moment(fecha + horaInicio, 'YYYY-MM-DD HH:mm').calendar();
-    return nuevaFecha;
   }
 
 }

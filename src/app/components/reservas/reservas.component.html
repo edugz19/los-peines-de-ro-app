@@ -1,0 +1,24 @@
+<div *ngIf="arrayReservas.length > 0" class="fav-list m-2">
+  <div *ngFor="let reserva of arrayReservas" class="mt-3">
+    <div class="row" style="cursor: pointer">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">
+              <strong style="margin: 0"
+                >{{ reserva.nombre | titlecase}}</strong
+              ></h5>
+            <p class="card-text"><strong>Fecha: {{ formatearFecha(reserva.fecha, reserva.horaInicio) }}</strong></p>
+            <p class="card-text" *ngIf="!reserva.pagado">Pago presencial de {{ reserva.precio }}€</p>
+            <p class="card-text" *ngIf="reserva.pagado">Reserva pagada online a través de pasarela de pago.</p>
+            <ion-button color="danger" expand="block">Cancelar Reserva</ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="arrayReservas.length === 0" class="sin-reservas">
+  <ion-text>Aún no has reservado ninguna cita.</ion-text>
+</div>

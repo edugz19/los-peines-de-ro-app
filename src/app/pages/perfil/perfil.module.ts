@@ -7,8 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { PerfilPageRoutingModule } from './perfil-routing.module';
 
 import { PerfilPage } from './perfil.page';
-import { HeaderComponent } from 'src/app/components/header/header.component';
 import { HeaderModule } from '../../modules/header/header.module';
+import { ReservasComponent } from '../../components/reservas/reservas.component';
+import { FavoritosComponent } from '../../components/favoritos/favoritos.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,6 @@ import { HeaderModule } from '../../modules/header/header.module';
     HeaderModule,
     ReactiveFormsModule
   ],
-  declarations: [PerfilPage]
+  declarations: [PerfilPage, ReservasComponent, FavoritosComponent]
 })
 export class PerfilPageModule {}
