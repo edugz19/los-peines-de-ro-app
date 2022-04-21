@@ -11,6 +11,9 @@ import { FavoritosService } from 'src/app/services/favoritos/favoritos.service';
 import { Servicio } from 'src/app/models/servicio.interface';
 import { Subscription } from 'rxjs';
 import { take, takeWhile } from 'rxjs/operators';
+import { ReservasService } from '../../services/reservas/reservas.service';
+import { Reserva } from 'src/app/models/reserva.interface';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-perfil',
@@ -28,8 +31,8 @@ export class PerfilPage implements OnInit {
   public segment: string;
   public nombre = new FormControl('');
   public phone = new FormControl('');
-  public reservas: boolean;
   public arrayFav: Array<string> = [];
+  public arrayReservas: Array<Reserva> = [];
   public servicios: Servicio[] = [];
 
   constructor(
@@ -37,6 +40,7 @@ export class PerfilPage implements OnInit {
     private authSvc: AuthService,
     private servSvc: ServiciosService,
     private favSvc: FavoritosService,
+    private resSvc: ReservasService,
     public toast: ToastController,
     public storage: AngularFireStorage,
     public actionSheetController: ActionSheetController
@@ -66,6 +70,17 @@ export class PerfilPage implements OnInit {
             }
           });
 
+        this.resSvc.getReservas()
+          .pipe(take(1))
+          .subscribe( reservas => {
+            for (const res of reservas) {
+              if (res.uid === this.usuario.uid) {
+                this.arrayReservas.push(res);
+                // console.log(this.arrayReservas);
+              }
+            }
+          });
+
         console.log(this.usuario);
 
         this.nombre.patchValue(this.usuario.displayName);
@@ -77,7 +92,6 @@ export class PerfilPage implements OnInit {
     }
 
     this.segment = 'reservas';
-    this.reservas = false;
   }
 
   segmentChanged(ev: any) {
@@ -220,6 +234,13 @@ export class PerfilPage implements OnInit {
     });
 
     (await toast).present();
+  }
+
+  formatearFecha(fecha: string, horaInicio: string) {
+    moment.locale('es');
+
+    const nuevaFecha = moment(fecha + horaInicio, 'YYYY-MM-DD HH:mm').calendar();
+    return nuevaFecha;
   }
 
 }

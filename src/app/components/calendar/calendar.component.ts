@@ -1,11 +1,12 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { IonDatetime, ModalController, ActionSheetController } from '@ionic/angular';
+import { IonDatetime, ModalController, ActionSheetController, ToastController } from '@ionic/angular';
 import { Servicio } from 'src/app/models/servicio.interface';
 import * as moment from 'moment';
 import { HORARIO } from '../../constants/horario.const';
 import { Reserva } from 'src/app/models/reserva.interface';
 import { ReservasService } from '../../services/reservas/reservas.service';
-import { FormControl } from '@angular/forms';
+import { User } from 'firebase/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-calendar',
@@ -15,6 +16,7 @@ import { FormControl } from '@angular/forms';
 export class CalendarComponent implements OnInit, OnDestroy {
   @ViewChild(IonDatetime, { static: true }) datetime: IonDatetime;
   @Input() servicio: Servicio;
+  @Input() usuario: User;
 
   public horario: Array<string> = HORARIO;
   public horarioInvalido: Array<string> = [];
@@ -27,11 +29,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public reservas: Reserva[] = [];
   public select: any;
   public horaInvalida = true;
+  private reserva: Reserva;
 
   constructor(
     public modalController: ModalController,
     private reservaSvc: ReservasService,
-    public actionSheetController: ActionSheetController
+    public actionSheetController: ActionSheetController,
+    public toastController: ToastController,
+    public router: Router
   ) {}
 
   ngOnInit(): void {
@@ -59,10 +64,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  continuar(servicio: Servicio) {
+  continuar(servicio: Servicio, usuario: User) {
     console.log(this.hora, this.fecha, this.horaFin);
     console.log(servicio);
-    this.openActionSheet(servicio);
+    this.openActionSheet(servicio, usuario, this.hora, this.horaFin, this.fecha);
   }
 
   cambiarHora(ev: any, duracion: number) {
@@ -189,9 +194,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
   }
 
-  async openActionSheet(servicio: Servicio) {
+  async openActionSheet(servicio: Servicio, usuario: User, horaInicio: string, horaFin: string, fecha: string) {
+    const fechaFormat = moment(fecha, 'YYYY-MM-DD').format('DD-MM-YYYY');
+
     const actionSheet = this.actionSheetController.create({
-      header: servicio.nombre.toUpperCase(),
+      header: servicio.nombre.toUpperCase() + ' - ' + this.truncarPrecio(servicio.precio) + '€',
+      subHeader: 'Reserva el día ' + fechaFormat + ', con inicio a las ' + horaInicio + ' y finalización a las ' + horaFin + '.',
       cssClass: 'my-css-class',
       buttons: [
         {
@@ -203,8 +211,26 @@ export class CalendarComponent implements OnInit, OnDestroy {
           icon: 'logo-paypal'
         },
         {
-          text: 'Pagar presencialmente',
+          text: 'Pago presencial',
           icon: 'cash-outline',
+          handler: () => {
+            const id = servicio.id + usuario.uid + fecha + horaInicio;
+
+              this.reserva = {
+                id,
+                uid: usuario.uid,
+                nombre: servicio.nombre,
+                servicio: servicio.id,
+                horaInicio,
+                horaFin,
+                fecha,
+                precio: servicio.precio,
+                pagado: false
+              };
+
+              this.reservaSvc.createReserva(this.reserva);
+              this.volver();
+          }
         },
         {
           text: 'Volver atrás',

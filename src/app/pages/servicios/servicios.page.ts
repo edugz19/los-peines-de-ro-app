@@ -145,12 +145,13 @@ export class ServiciosPage implements OnInit {
     }
   }
 
-  async openReservaModal(servicio: Servicio) {
+  async openReservaModal(servicio: Servicio, usuario: User) {
     const modal = await this.modalController.create({
       component: CalendarComponent,
       cssClass: 'css-modal',
       componentProps: {
-        servicio
+        servicio,
+        usuario
       }
     });
 
@@ -176,7 +177,13 @@ export class ServiciosPage implements OnInit {
           text: 'Reservar',
           icon: 'bag-add',
           handler: () => {
-            this.openReservaModal(servicio);
+            if (this.isLogged) {
+              this.openReservaModal(servicio, this.usuario);
+            } else {
+              const mensaje = 'Debes iniciar sesión para crear reservas.';
+              const color = 'danger';
+              this.favToast(mensaje, color);
+            }
           }
         },
         {
