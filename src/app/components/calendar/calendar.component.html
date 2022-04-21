@@ -57,7 +57,8 @@
         <ion-button 
           style="width: 48%; font-weight: bold;" 
           color="primary" 
-          (click)="continuar()"
+          (click)="continuar(servicio)"
+          [disabled]="horaInvalida"
         >Continuar</ion-button>
     </ion-col>
   </ion-row>

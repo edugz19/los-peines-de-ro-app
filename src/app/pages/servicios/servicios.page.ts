@@ -225,7 +225,7 @@ export class ServiciosPage implements OnInit {
 
   async presentLoading() {
     const loading = await this.loadingController.create({
-      message: 'Please wait...',
+      message: 'Cargando servicios...',
       duration: 2000
     });
     await loading.present();

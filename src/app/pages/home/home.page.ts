@@ -31,9 +31,6 @@ export class HomePage implements OnInit {
       this.isLogged = true;
       console.log(this.usuario);
     }
-
-    this.modoOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    console.log(this.modoOscuro);
   }
 
 }

@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { IonDatetime, ModalController } from '@ionic/angular';
+import { IonDatetime, ModalController, ActionSheetController } from '@ionic/angular';
 import { Servicio } from 'src/app/models/servicio.interface';
 import * as moment from 'moment';
 import { HORARIO } from '../../constants/horario.const';
 import { Reserva } from 'src/app/models/reserva.interface';
 import { ReservasService } from '../../services/reservas/reservas.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-calendar',
@@ -19,15 +20,18 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public horarioInvalido: Array<string> = [];
   public horarioReal: Array<string | any> = [];
   public fechaActual: string;
+  public fecha: string;
   public hora = '';
   public horaFin: string;
   public esDiaValido = false;
   public reservas: Reserva[] = [];
   public select: any;
+  public horaInvalida = true;
 
   constructor(
     public modalController: ModalController,
-    private reservaSvc: ReservasService
+    private reservaSvc: ReservasService,
+    public actionSheetController: ActionSheetController
   ) {}
 
   ngOnInit(): void {
@@ -55,8 +59,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  continuar() {
-    console.log(this.datetime.confirm());
+  continuar(servicio: Servicio) {
+    console.log(this.hora, this.fecha, this.horaFin);
+    console.log(servicio);
+    this.openActionSheet(servicio);
   }
 
   cambiarHora(ev: any, duracion: number) {
@@ -64,15 +70,19 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.horaFin = moment(this.hora, 'HH:mm')
       .add(duracion, 'm')
       .format('HH:mm');
+    this.horaInvalida = false;
   }
 
   comprobarFecha(ev: any, duracion: number) {
     const fecha = moment(ev.detail.value);
     const fechaFormateada = fecha.format('YYYY-MM-DD');
+    this.fecha = fechaFormateada;
     const dia = moment.weekdays(fecha.day());
     this.select = null;
     this.horarioReal = [];
     const array = [];
+    this.horaInvalida = true;
+    this.hora = '';
 
     if (dia === 'Saturday' || dia === 'Sunday') {
       this.esDiaValido = false;
@@ -177,5 +187,33 @@ export class CalendarComponent implements OnInit, OnDestroy {
     } else {
       return false;
     }
+  }
+
+  async openActionSheet(servicio: Servicio) {
+    const actionSheet = this.actionSheetController.create({
+      header: servicio.nombre.toUpperCase(),
+      cssClass: 'my-css-class',
+      buttons: [
+        {
+          text: 'Pagar con tarjeta de crédito/débito',
+          icon: 'card-outline',
+        },
+        {
+          text: 'Pagar con Paypal',
+          icon: 'logo-paypal'
+        },
+        {
+          text: 'Pagar presencialmente',
+          icon: 'cash-outline',
+        },
+        {
+          text: 'Volver atrás',
+          role: 'cancel',
+          icon: 'close'
+        }
+      ]
+    });
+
+    (await actionSheet).present();
   }
 }
