@@ -38,10 +38,6 @@ const routes: Routes = [
   {
     path: 'recuperar-pass',
     loadChildren: () => import('./pages/recuperar-pass/recuperar-pass.module').then( m => m.RecuperarPassPageModule)
-  },
-  {
-    path: 'stripe-success',
-    loadChildren: () => import('./pages/stripe-success/stripe-success.module').then( m => m.StripeSuccessPageModule)
   }
 ];
 @NgModule({
