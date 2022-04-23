@@ -42,6 +42,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public select: any;
   public horaInvalida = true;
   private reserva: Reserva;
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public ev: any;
 
   constructor(
     public modalController: ModalController,
@@ -51,9 +53,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     public router: Router,
     private afFun: AngularFireFunctions,
     public loadingController: LoadingController
-  ) {
-    // afFun.useEmulator('localhost', 5001);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.fechaActual = moment().add(1, 'd').format('YYYY-MM-DD');
@@ -247,7 +247,23 @@ export class CalendarComponent implements OnInit, OnDestroy {
           text: 'Pagar con tarjeta de crédito/débito',
           icon: 'card-outline',
           handler: () => {
-            this.checkout(this.servicio, this.usuario);
+            this.checkout(this.servicio);
+
+            const id = servicio.id + usuario.uid + fecha + horaInicio;
+
+            this.reserva = {
+              id,
+              uid: usuario.uid,
+              nombre: servicio.nombre,
+              servicio: servicio.id,
+              horaInicio,
+              horaFin,
+              fecha,
+              precio: servicio.precio,
+              pagado: true,
+            };
+
+            this.reservaSvc.createReserva(this.reserva);
           },
         },
         {
@@ -290,25 +306,23 @@ export class CalendarComponent implements OnInit, OnDestroy {
     (await actionSheet).present();
   }
 
-  checkout(servicio: Servicio, usuario: User): void {
+  checkout(servicio: Servicio): void {
     const stripe = Stripe(environment.stripeKey);
 
     this.afFun
       .httpsCallable('stripeCheckoutWithoutQueries')({
         titulo: servicio.nombre,
         precio: servicio.precio,
-        nombre: usuario.displayName,
-        email: usuario.email,
       })
       .subscribe((result) => {
         console.log({ result });
 
-        stripe
+        this.ev = stripe
           .redirectToCheckout({
             sessionId: result,
           })
           .then(function(results: any) {
-            console.log(results.error.message);
+            console.log(results);
           });
       });
   }
@@ -316,7 +330,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   async presentLoading() {
     const loading = await this.loadingController.create({
       message: 'Realizando reserva...',
-      duration: 2000
+      duration: 2000,
     });
     await loading.present();
   }

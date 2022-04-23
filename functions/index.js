@@ -17,8 +17,8 @@ exports.stripeCheckoutWithoutQueries = functions.https.onCall(async (data, conte
             quantity: 1
         }],
         mode: 'payment',
-        success_url: 'https://lospeinesdero.000webhostapp.com/perfil',
-        cancel_url: 'https://lospeinesdero.000webhostapp.com/servicios'
+        success_url: 'http://localhost:8100/perfil',
+        cancel_url: 'http://localhost:8100/servicios'
     });
 
     return session.id;
