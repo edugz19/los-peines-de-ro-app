@@ -5,6 +5,7 @@ import { take } from 'rxjs/operators';
 import { FavoritosService } from 'src/app/services/favoritos/favoritos.service';
 import { ServiciosService } from 'src/app/services/servicios/servicios.service';
 import { Servicio } from '../../models/servicio.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-favoritos',
@@ -16,6 +17,9 @@ export class FavoritosComponent implements OnInit, OnDestroy {
   @Input() usuario: User;
 
   public arrayFav: Array<string> = [];
+  public arrayTemp: Array<Servicio> = [];
+
+  public subscription: Subscription;
 
   constructor(
     private favSvc: FavoritosService,
@@ -25,7 +29,7 @@ export class FavoritosComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.favSvc.getFavoritosconUID(this.usuario.uid).subscribe((favoritos) => {
+     this.favSvc.getFavoritosconUID(this.usuario.uid).subscribe((favoritos) => {
       if (favoritos === undefined) {
         this.favSvc.createFavoritos(this.usuario.uid);
       } else {
@@ -39,7 +43,8 @@ export class FavoritosComponent implements OnInit, OnDestroy {
       .subscribe((servicios) => {
         for (const servicio of servicios) {
           if (this.arrayFav.indexOf(servicio.id) !== -1) {
-            this.servicios.push(servicio);
+            this.arrayTemp.push(servicio);
+            console.log(this.arrayTemp);
           }
         }
       });

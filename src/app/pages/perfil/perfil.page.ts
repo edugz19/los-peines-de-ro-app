@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { User } from 'firebase/auth';
 import { FormControl } from '@angular/forms';
@@ -8,13 +8,15 @@ import { AngularFireStorageReference, AngularFireUploadTask, AngularFireStorage 
 import { FileI } from '../../models/file.interface';
 import { Servicio } from 'src/app/models/servicio.interface';
 import { Reserva } from 'src/app/models/reserva.interface';
+import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
 })
-export class PerfilPage implements OnInit {
+export class PerfilPage implements OnInit, OnDestroy {
   public ref: AngularFireStorageReference;
   public afTask: AngularFireUploadTask;
   public file: FileI;
@@ -29,13 +31,21 @@ export class PerfilPage implements OnInit {
   public arrayReservas: Array<Reserva> = [];
   public servicios: Servicio[] = [];
 
+  public subscriber: Subscription;
+
   constructor(
     public router: Router,
     private authSvc: AuthService,
     public toast: ToastController,
     public storage: AngularFireStorage,
     public actionSheetController: ActionSheetController
-    ) { }
+    ) {
+      this.subscriber = this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe((event: any) => {
+         this.segment = 'reservas';
+      });
+    }
 
   async ngOnInit() {
     this.usuario = await this.authSvc.getUsuarioActual();
@@ -56,6 +66,10 @@ export class PerfilPage implements OnInit {
 
     this.segment = 'reservas';
   }
+
+  ngOnDestroy() {
+    this.subscriber?.unsubscribe();
+ }
 
   segmentChanged(ev: any) {
     this.segment = ev.detail.value;

@@ -1,6 +1,11 @@
 /* eslint-disable prefer-arrow/prefer-arrow-functions */
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { IonDatetime, ModalController, ActionSheetController, ToastController } from '@ionic/angular';
+import {
+  IonDatetime,
+  ModalController,
+  ActionSheetController,
+  ToastController,
+} from '@ionic/angular';
 import { Servicio } from 'src/app/models/servicio.interface';
 import * as moment from 'moment';
 import { HORARIO } from '../../constants/horario.const';
@@ -10,6 +15,7 @@ import { User } from 'firebase/auth';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { LoadingController } from '@ionic/angular';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 declare let Stripe: any;
@@ -43,7 +49,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     public actionSheetController: ActionSheetController,
     public toastController: ToastController,
     public router: Router,
-    private afFun: AngularFireFunctions
+    private afFun: AngularFireFunctions,
+    public loadingController: LoadingController
   ) {
     // afFun.useEmulator('localhost', 5001);
   }
@@ -76,7 +83,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
   continuar(servicio: Servicio, usuario: User) {
     console.log(this.hora, this.fecha, this.horaFin);
     console.log(servicio);
-    this.openActionSheet(servicio, usuario, this.hora, this.horaFin, this.fecha);
+    this.openActionSheet(
+      servicio,
+      usuario,
+      this.hora,
+      this.horaFin,
+      this.fecha
+    );
   }
 
   cambiarHora(ev: any, duracion: number) {
@@ -151,9 +164,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
       // console.log(newArray);
 
-      const uniqueValues = ar => [...new Set(
-        ar.filter(el => ar.filter(el2 => el2===el).length === 1)
-      )];
+      const uniqueValues = (ar) => [
+        ...new Set(
+          ar.filter((el) => ar.filter((el2) => el2 === el).length === 1)
+        ),
+      ];
 
       this.horarioReal = uniqueValues(newArray);
 
@@ -203,12 +218,29 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
   }
 
-  async openActionSheet(servicio: Servicio, usuario: User, horaInicio: string, horaFin: string, fecha: string) {
+  async openActionSheet(
+    servicio: Servicio,
+    usuario: User,
+    horaInicio: string,
+    horaFin: string,
+    fecha: string
+  ) {
     const fechaFormat = moment(fecha, 'YYYY-MM-DD').format('DD-MM-YYYY');
 
     const actionSheet = this.actionSheetController.create({
-      header: servicio.nombre.toUpperCase() + ' - ' + this.truncarPrecio(servicio.precio) + '€',
-      subHeader: 'Reserva el día ' + fechaFormat + ', con inicio a las ' + horaInicio + ' y finalización a las ' + horaFin + '.',
+      header:
+        servicio.nombre.toUpperCase() +
+        ' - ' +
+        this.truncarPrecio(servicio.precio) +
+        '€',
+      subHeader:
+        'Reserva el día ' +
+        fechaFormat +
+        ', con inicio a las ' +
+        horaInicio +
+        ' y finalización a las ' +
+        horaFin +
+        '.',
       cssClass: 'my-css-class',
       buttons: [
         {
@@ -216,11 +248,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
           icon: 'card-outline',
           handler: () => {
             this.checkout(this.servicio, this.usuario);
-          }
+          },
         },
         {
           text: 'Pagar con Paypal',
-          icon: 'logo-paypal'
+          icon: 'logo-paypal',
         },
         {
           text: 'Pago presencial',
@@ -228,28 +260,31 @@ export class CalendarComponent implements OnInit, OnDestroy {
           handler: () => {
             const id = servicio.id + usuario.uid + fecha + horaInicio;
 
-              this.reserva = {
-                id,
-                uid: usuario.uid,
-                nombre: servicio.nombre,
-                servicio: servicio.id,
-                horaInicio,
-                horaFin,
-                fecha,
-                precio: servicio.precio,
-                pagado: false
-              };
+            this.reserva = {
+              id,
+              uid: usuario.uid,
+              nombre: servicio.nombre,
+              servicio: servicio.id,
+              horaInicio,
+              horaFin,
+              fecha,
+              precio: servicio.precio,
+              pagado: false,
+            };
 
-              this.reservaSvc.createReserva(this.reserva);
-              this.volver();
-          }
+            this.reservaSvc.createReserva(this.reserva);
+            this.presentLoading();
+            this.modalController.dismiss({
+              dismissed: true,
+            });
+          },
         },
         {
           text: 'Volver atrás',
           role: 'cancel',
-          icon: 'close'
-        }
-      ]
+          icon: 'close',
+        },
+      ],
     });
 
     (await actionSheet).present();
@@ -258,22 +293,31 @@ export class CalendarComponent implements OnInit, OnDestroy {
   checkout(servicio: Servicio, usuario: User): void {
     const stripe = Stripe(environment.stripeKey);
 
-    this.afFun.httpsCallable('stripeCheckoutWithoutQueries')({
-      titulo: servicio.nombre,
-      precio: servicio.precio,
-      nombre: usuario.displayName,
-      email: usuario.email
-    })
-        .subscribe(result => {
-            console.log({ result });
+    this.afFun
+      .httpsCallable('stripeCheckoutWithoutQueries')({
+        titulo: servicio.nombre,
+        precio: servicio.precio,
+        nombre: usuario.displayName,
+        email: usuario.email,
+      })
+      .subscribe((result) => {
+        console.log({ result });
 
-            stripe.redirectToCheckout({
-                sessionId: result,
-            }).then(function(results: any) {
-                console.log(results.error.message);
-            });
-        });
-}
+        stripe
+          .redirectToCheckout({
+            sessionId: result,
+          })
+          .then(function(results: any) {
+            console.log(results.error.message);
+          });
+      });
+  }
 
-
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Realizando reserva...',
+      duration: 2000
+    });
+    await loading.present();
+  }
 }

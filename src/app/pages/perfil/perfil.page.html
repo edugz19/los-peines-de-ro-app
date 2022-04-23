@@ -13,7 +13,7 @@
     <span class="text-secondary">{{ usuario.displayName }}</span>
   </div>
 
-  <ion-segment value="reservas" (ionChange)="segmentChanged($event)">
+  <ion-segment [value]="this.segment" (ionChange)="segmentChanged($event)">
     <ion-segment-button value="reservas">
       <ion-label>Reservas</ion-label>
     </ion-segment-button>
