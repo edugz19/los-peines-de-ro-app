@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow/prefer-arrow-functions */
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IonDatetime, ModalController, ActionSheetController, ToastController } from '@ionic/angular';
 import { Servicio } from 'src/app/models/servicio.interface';
@@ -7,6 +8,11 @@ import { Reserva } from 'src/app/models/reserva.interface';
 import { ReservasService } from '../../services/reservas/reservas.service';
 import { User } from 'firebase/auth';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+declare let Stripe: any;
 
 @Component({
   selector: 'app-calendar',
@@ -36,8 +42,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private reservaSvc: ReservasService,
     public actionSheetController: ActionSheetController,
     public toastController: ToastController,
-    public router: Router
-  ) {}
+    public router: Router,
+    private afFun: AngularFireFunctions
+  ) {
+    // afFun.useEmulator('localhost', 5001);
+  }
 
   ngOnInit(): void {
     this.fechaActual = moment().add(1, 'd').format('YYYY-MM-DD');
@@ -205,6 +214,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
         {
           text: 'Pagar con tarjeta de crédito/débito',
           icon: 'card-outline',
+          handler: () => {
+            this.checkout(this.servicio, this.usuario);
+          }
         },
         {
           text: 'Pagar con Paypal',
@@ -242,4 +254,26 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     (await actionSheet).present();
   }
+
+  checkout(servicio: Servicio, usuario: User): void {
+    const stripe = Stripe(environment.stripeKey);
+
+    this.afFun.httpsCallable('stripeCheckoutWithoutQueries')({
+      titulo: servicio.nombre,
+      precio: servicio.precio,
+      nombre: usuario.displayName,
+      email: usuario.email
+    })
+        .subscribe(result => {
+            console.log({ result });
+
+            stripe.redirectToCheckout({
+                sessionId: result,
+            }).then(function(results: any) {
+                console.log(results.error.message);
+            });
+        });
+}
+
+
 }

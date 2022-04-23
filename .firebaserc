@@ -1,4 +1,8 @@
 {
+  "projects": {
+    "default": "los-peines-de-ro",
+    "los-peines-de-ro": "los-peines-de-ro"
+  },
   "targets": {
     "los-peines-de-ro": {
       "hosting": {
@@ -7,8 +11,5 @@
         ]
       }
     }
-  },
-  "projects": {
-    "default": "los-peines-de-ro"
   }
 }

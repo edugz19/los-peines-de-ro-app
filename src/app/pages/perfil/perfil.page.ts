@@ -1,19 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { User } from 'firebase/auth';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ToastController, ActionSheetController } from '@ionic/angular';
 import { AngularFireStorageReference, AngularFireUploadTask, AngularFireStorage } from '@angular/fire/compat/storage';
 import { FileI } from '../../models/file.interface';
-import { ServiciosService } from '../../services/servicios/servicios.service';
-import { FavoritosService } from 'src/app/services/favoritos/favoritos.service';
 import { Servicio } from 'src/app/models/servicio.interface';
-import { Subscription } from 'rxjs';
-import { take, takeWhile } from 'rxjs/operators';
-import { ReservasService } from '../../services/reservas/reservas.service';
 import { Reserva } from 'src/app/models/reserva.interface';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-perfil',
