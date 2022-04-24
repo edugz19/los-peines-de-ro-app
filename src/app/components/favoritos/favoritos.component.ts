@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ActionSheetController, ToastController } from '@ionic/angular';
+import { ActionSheetController, ToastController, ModalController } from '@ionic/angular';
 import { User } from 'firebase/auth';
 import { take } from 'rxjs/operators';
 import { FavoritosService } from 'src/app/services/favoritos/favoritos.service';
 import { ServiciosService } from 'src/app/services/servicios/servicios.service';
 import { Servicio } from '../../models/servicio.interface';
 import { Subscription } from 'rxjs';
+import { CalendarComponent } from '../calendar/calendar.component';
 
 @Component({
   selector: 'app-favoritos',
@@ -25,7 +26,8 @@ export class FavoritosComponent implements OnInit, OnDestroy {
     private favSvc: FavoritosService,
     private servSvc: ServiciosService,
     public toast: ToastController,
-    public actionSheetController: ActionSheetController
+    public actionSheetController: ActionSheetController,
+    public modalController: ModalController
   ) {}
 
   ngOnInit() {
@@ -70,6 +72,9 @@ export class FavoritosComponent implements OnInit, OnDestroy {
         {
           text: 'Reservar',
           icon: 'bag-add',
+          handler: () => {
+            this.openReservaModal(servicio, this.usuario);
+          }
         },
         {
           text: texto,
@@ -143,5 +148,18 @@ export class FavoritosComponent implements OnInit, OnDestroy {
     } else {
       return precio;
     }
+  }
+
+  async openReservaModal(servicio: Servicio, usuario: User) {
+    const modal = await this.modalController.create({
+      component: CalendarComponent,
+      cssClass: 'css-modal',
+      componentProps: {
+        servicio,
+        usuario
+      }
+    });
+
+    return await modal.present();
   }
 }

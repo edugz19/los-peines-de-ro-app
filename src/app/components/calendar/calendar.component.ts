@@ -247,6 +247,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
           text: 'Pagar con tarjeta de crédito/débito',
           icon: 'card-outline',
           handler: () => {
+            this.modalController.dismiss({
+              dismissed: true
+            });
+
             this.checkout(this.servicio);
 
             const id = servicio.id + usuario.uid + fecha + horaInicio;
@@ -263,7 +267,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
               pagado: true,
             };
 
-            this.reservaSvc.createReserva(this.reserva);
+            this.reservaSvc.createReserva(this.reserva, 'stripe');
           },
         },
         {
@@ -288,7 +292,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
               pagado: false,
             };
 
-            this.reservaSvc.createReserva(this.reserva);
+            this.reservaSvc.createReserva(this.reserva, 'presencial');
             this.presentLoading();
             this.modalController.dismiss({
               dismissed: true,
