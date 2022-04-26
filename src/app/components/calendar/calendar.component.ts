@@ -1,5 +1,5 @@
 /* eslint-disable prefer-arrow/prefer-arrow-functions */
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   IonDatetime,
   ModalController,
@@ -16,9 +16,12 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { LoadingController } from '@ionic/angular';
+import { Stripe } from '@ionic-native/stripe/ngx';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+declare let paypal;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-declare let Stripe: any;
 
 @Component({
   selector: 'app-calendar',
@@ -27,6 +30,7 @@ declare let Stripe: any;
 })
 export class CalendarComponent implements OnInit, OnDestroy {
   @ViewChild(IonDatetime, { static: true }) datetime: IonDatetime;
+  @ViewChild('paypal', { static: true }) paypalElement: ElementRef;
   @Input() servicio: Servicio;
   @Input() usuario: User;
 
@@ -52,8 +56,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
     public toastController: ToastController,
     public router: Router,
     private afFun: AngularFireFunctions,
-    public loadingController: LoadingController
-  ) {}
+    public loadingController: LoadingController,
+    private stripe: Stripe,
+    private http: HttpClient
+  ) {
+    this.afFun.useEmulator('localhost', 5001);
+  }
 
   ngOnInit(): void {
     this.fechaActual = moment().add(1, 'd').format('YYYY-MM-DD');
@@ -247,32 +255,60 @@ export class CalendarComponent implements OnInit, OnDestroy {
           text: 'Pagar con tarjeta de crédito/débito',
           icon: 'card-outline',
           handler: () => {
-            this.modalController.dismiss({
-              dismissed: true
-            });
+            this.stripe.setPublishableKey(environment.stripeKey);
 
-            this.checkout(this.servicio);
-
-            const id = servicio.id + usuario.uid + fecha + horaInicio;
-
-            this.reserva = {
-              id,
-              uid: usuario.uid,
-              nombre: servicio.nombre,
-              servicio: servicio.id,
-              horaInicio,
-              horaFin,
-              fecha,
-              precio: servicio.precio,
-              pagado: true,
+            const cardDetails = {
+              // eslint-disable-next-line id-blacklist
+              number: '4242424242424242',
+              expMonth: 12,
+              expYear: 2023,
+              cvc: '220',
             };
 
-            this.reservaSvc.createReserva(this.reserva, 'stripe');
+            this.stripe
+              .createCardToken(cardDetails)
+              .then((token) => {
+                console.log(token);
+                this.makePayment(token.id, this.servicio);
+              })
+              .catch((error) => console.error(error));
+
+            // this.modalController.dismiss({
+            //   dismissed: true
+            // });
+
+            // this.checkout(this.servicio);
+
+            // const id = servicio.id + usuario.uid + fecha + horaInicio;
+
+            // this.reserva = {
+            //   id,
+            //   uid: usuario.uid,
+            //   nombre: servicio.nombre,
+            //   servicio: servicio.id,
+            //   horaInicio,
+            //   horaFin,
+            //   fecha,
+            //   precio: servicio.precio,
+            //   pagado: true,
+            // };
+
+            // this.reservaSvc.createReserva(this.reserva, 'stripe');
           },
         },
         {
           text: 'Pagar con Paypal',
           icon: 'logo-paypal',
+          handler: () => {
+
+            const paypalCreateOrder = this.afFun.httpsCallable('paypalCreateOrder');
+            const paypalHandleOrder = this.afFun.httpsCallable('paypalHandleOrder');
+
+            paypal.Buttons({
+              createOrder: (data, actions) => paypalCreateOrder(data).subscribe(res => res.data.id),
+              onApprove: (data, actions) => paypalHandleOrder({orderId: data.orderID})
+            }).render(this.paypalElement.nativeElement);
+          }
         },
         {
           text: 'Pago presencial',
@@ -310,32 +346,22 @@ export class CalendarComponent implements OnInit, OnDestroy {
     (await actionSheet).present();
   }
 
-  checkout(servicio: Servicio): void {
-    const stripe = Stripe(environment.stripeKey);
-
-    this.afFun
-      .httpsCallable('stripeCheckoutWithoutQueries')({
-        titulo: servicio.nombre,
-        precio: servicio.precio,
-      })
-      .subscribe((result) => {
-        console.log({ result });
-
-        this.ev = stripe
-          .redirectToCheckout({
-            sessionId: result,
-          })
-          .then(function(results: any) {
-            console.log(results);
-          });
-      });
-  }
-
   async presentLoading() {
     const loading = await this.loadingController.create({
       message: 'Realizando reserva...',
       duration: 2000,
     });
     await loading.present();
+  }
+
+  makePayment(token: string, servicio: Servicio) {
+    this.http
+      .post(
+        'https://us-central1-los-peines-de-ro.cloudfunctions.net/payWithStripe',
+        { token, servicio }
+      )
+      .subscribe((data) => {
+        console.log(data);
+      });
   }
 }

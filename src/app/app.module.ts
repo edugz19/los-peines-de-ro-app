@@ -21,6 +21,8 @@ import { TabsComponent } from './components/tabs/tabs.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Stripe } from '@ionic-native/stripe/ngx';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -37,10 +39,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     AngularFireStorageModule,
     ReactiveFormsModule,
     FontAwesomeModule,
-    AngularFireFunctionsModule
+    AngularFireFunctionsModule,
+    HttpClientModule
   ],
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Stripe,
+    HttpClient
   ],
   bootstrap: [AppComponent],
 })
