@@ -34,6 +34,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   @Input() servicio: Servicio;
   @Input() usuario: User;
 
+  public modoOscuro: boolean;
   public horario: Array<string> = HORARIO;
   public horarioInvalido: Array<string> = [];
   public horarioReal: Array<string | any> = [];
@@ -60,7 +61,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private stripe: Stripe,
     private http: HttpClient
   ) {
-    this.afFun.useEmulator('localhost', 5001);
+    // this.afFun.useEmulator('localhost', 5001);
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersDark.matches) {
+      this.modoOscuro = true;
+    } else {
+      this.modoOscuro = false;
+    }
   }
 
   ngOnInit(): void {

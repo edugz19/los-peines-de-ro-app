@@ -23,6 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Stripe } from '@ionic-native/stripe/ngx';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { VariablesGlobales } from './global/VariablesGlobales';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Stripe,
-    HttpClient
+    HttpClient,
+    VariablesGlobales
   ],
   bootstrap: [AppComponent],
 })

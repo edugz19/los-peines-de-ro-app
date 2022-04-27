@@ -25,7 +25,8 @@
   <ion-row *ngIf="!esDiaValido" style="max-width: 350px">
     <ion-col size="12">
       <div class="horario">
-        <img src="assets/icon/no-disponible.png" alt="">
+        <img src="assets/icon/no-disponible.png" alt="" *ngIf="!modoOscuro">
+        <img src="assets/icon/no-disponible-dark.png" alt="" *ngIf="modoOscuro">
         <span style="text-align: center;">Lo sentimos, no hay disponibilidad para esta fecha. Prueba con otra.</span>
       </div>
     </ion-col>

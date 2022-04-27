@@ -21,7 +21,14 @@ export class HomePage implements OnInit {
   constructor(
     private authSvc: AuthService,
     public router: Router
-  ) { }
+  ) {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersDark.matches) {
+      this.modoOscuro = true;
+    } else {
+      this.modoOscuro = false;
+    }
+  }
 
   async ngOnInit() {
     this.usuario = await this.authSvc.getUsuarioActual();
