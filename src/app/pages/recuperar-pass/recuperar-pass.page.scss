@@ -31,3 +31,13 @@ ion-input {
 ion-button, ion-card-title {
     font-weight: bold;
 }
+
+@media (prefers-color-scheme: dark) {
+    .card {
+        background-color: #121212;
+    }
+
+    ion-input {
+        color: white;
+    }
+}

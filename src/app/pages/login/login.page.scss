@@ -37,3 +37,9 @@ ion-input {
 .forget {
     margin-top: 30px;
 }
+
+@media (prefers-color-scheme: dark) {
+    ion-input {
+        color: white;
+    }
+}

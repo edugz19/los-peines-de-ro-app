@@ -37,3 +37,9 @@ ion-input {
 ion-button, h1 {
     font-weight: bold;
 }
+
+@media (prefers-color-scheme: dark) {
+    ion-input {
+        color: white;
+    }
+}

@@ -12,3 +12,13 @@
     padding: 0 20px;
     text-align: center;
 }
+
+.card {
+    border-radius: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .card {
+        background-color: #1e1e1e;
+    }
+}

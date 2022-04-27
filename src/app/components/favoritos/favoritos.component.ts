@@ -1,5 +1,9 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ActionSheetController, ToastController, ModalController } from '@ionic/angular';
+import {
+  ActionSheetController,
+  ToastController,
+  ModalController,
+} from '@ionic/angular';
 import { User } from 'firebase/auth';
 import { take } from 'rxjs/operators';
 import { FavoritosService } from 'src/app/services/favoritos/favoritos.service';
@@ -31,7 +35,7 @@ export class FavoritosComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-     this.favSvc.getFavoritosconUID(this.usuario.uid).subscribe((favoritos) => {
+    this.favSvc.getFavoritosconUID(this.usuario.uid).subscribe((favoritos) => {
       if (favoritos === undefined) {
         this.favSvc.createFavoritos(this.usuario.uid);
       } else {
@@ -44,7 +48,7 @@ export class FavoritosComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe((servicios) => {
         for (const servicio of servicios) {
-          if (this.arrayFav.indexOf(servicio.id) !== -1) {
+          if (this.arrayFav.includes(servicio.id)) {
             this.arrayTemp.push(servicio);
             console.log(this.arrayTemp);
           }
@@ -60,7 +64,7 @@ export class FavoritosComponent implements OnInit, OnDestroy {
     let icono = 'heart-outline';
     let texto = 'Añadir a favoritos';
 
-    if (this.arrayFav.indexOf(servicio.id) !== -1) {
+    if (this.arrayFav.includes(servicio.id)) {
       icono = 'heart';
       texto = 'Quitar de favoritos';
     }
@@ -74,24 +78,38 @@ export class FavoritosComponent implements OnInit, OnDestroy {
           icon: 'bag-add',
           handler: () => {
             this.openReservaModal(servicio, this.usuario);
-          }
+          },
         },
         {
           text: texto,
           icon: icono,
           handler: () => {
-            const existe = this.arrayFav.indexOf(servicio.id);
+            const existe = this.arrayFav.includes(servicio.id);
 
-            if (existe !== -1) {
+            if (existe) {
               const array = this.arrayFav.filter(
                 (item) => item !== servicio.id
               );
+
+              console.log(array);
+
               this.favSvc.updateFavorito(array, this.usuario.uid);
               this.arrayFav = array;
-              const arrayServ = this.servicios.filter(
-                (item) => item.id !== servicio.id
-              );
-              this.servicios = arrayServ;
+
+              this.arrayTemp = [];
+
+              this.servSvc
+                .getServicios()
+                .pipe(take(1))
+                .subscribe((servicios) => {
+                  for (const serv of servicios) {
+                    if (this.arrayFav.includes(serv.id)) {
+                      this.arrayTemp.push(serv);
+                      console.log(this.arrayTemp);
+                    }
+                  }
+                });
+
               const mensaje = 'Servicio eliminado de favoritos correctamente';
               const color = 'warning';
               this.favToast(mensaje, color);
@@ -156,8 +174,8 @@ export class FavoritosComponent implements OnInit, OnDestroy {
       cssClass: 'css-modal',
       componentProps: {
         servicio,
-        usuario
-      }
+        usuario,
+      },
     });
 
     return await modal.present();

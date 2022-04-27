@@ -30,3 +30,22 @@
     padding: 20px;
     text-align: center;
 }
+
+@media (prefers-color-scheme: dark) {
+    h4 {
+        color: white;
+    }
+
+    ion-datetime {
+        color: white;
+        background-color: #121212;
+    }
+
+    hr {
+        color: white;
+    }
+
+    div {
+        color: white 
+    }
+}
