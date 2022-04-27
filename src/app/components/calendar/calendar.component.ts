@@ -18,6 +18,7 @@ import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { LoadingController } from '@ionic/angular';
 import { Stripe } from '@ionic-native/stripe/ngx';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FESTIVOS } from '../../constants/festivos.const';
 
 declare let paypal;
 
@@ -36,6 +37,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   public modoOscuro: boolean;
   public horario: Array<string> = HORARIO;
+  public festivos: Array<string> = FESTIVOS;
   public horarioInvalido: Array<string> = [];
   public horarioReal: Array<string | any> = [];
   public fechaActual: string;
@@ -126,7 +128,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.horaInvalida = true;
     this.hora = '';
 
-    if (dia === 'Saturday' || dia === 'Sunday') {
+
+
+    if (dia === 'Saturday' || dia === 'Sunday' || this.festivos.includes(fechaFormateada)) {
       this.esDiaValido = false;
     } else {
       for (const item of this.reservas) {
