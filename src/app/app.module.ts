@@ -24,6 +24,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Stripe } from '@ionic-native/stripe/ngx';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { VariablesGlobales } from './global/VariablesGlobales';
+import { LocalNotifications } from '@awesome-cordova-plugins/local-notifications/ngx';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { VariablesGlobales } from './global/VariablesGlobales';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Stripe,
     HttpClient,
-    VariablesGlobales
+    VariablesGlobales,
+    LocalNotifications
   ],
   bootstrap: [AppComponent],
 })

@@ -19,10 +19,9 @@ import { LoadingController } from '@ionic/angular';
 import { Stripe } from '@ionic-native/stripe/ngx';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FESTIVOS } from '../../constants/festivos.const';
+import { LocalNotifications } from '@awesome-cordova-plugins/local-notifications/ngx';
 
 declare let paypal;
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
 
 @Component({
   selector: 'app-calendar',
@@ -61,7 +60,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private afFun: AngularFireFunctions,
     public loadingController: LoadingController,
     private stripe: Stripe,
-    private http: HttpClient
+    private http: HttpClient,
+    private localNotifications: LocalNotifications
   ) {
     // this.afFun.useEmulator('localhost', 5001);
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
@@ -340,6 +340,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
             };
 
             this.reservaSvc.createReserva(this.reserva, 'presencial');
+            this.localNotifications.schedule({
+              id: 1,
+              text: `Se ha completado tu reserva de ${servicio.nombre} con fecha ${fecha} y hora ${horaInicio}`,
+            });
             this.presentLoading();
             this.modalController.dismiss({
               dismissed: true,
