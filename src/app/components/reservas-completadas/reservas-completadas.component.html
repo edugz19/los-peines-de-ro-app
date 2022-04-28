@@ -1,0 +1,27 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Historial de Reservas</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismissModal()"><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <div *ngFor="let reserva of reservas" class="fav-list mt-3">
+      <div class="row" style="cursor: pointer">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">
+                <strong style="margin: 0"
+                  >{{ reserva.nombre | titlecase}}</strong
+                ></h5>
+              <p class="card-text"><strong>Fecha: {{ formatearFecha(reserva.fecha, reserva.horaInicio) }}</strong></p>
+              <p class="card-text" *ngIf="!reserva.pagado">Pago presencial de {{ reserva.precio }}€</p>
+              <p class="card-text" *ngIf="reserva.pagado">Reserva pagada online a través de pasarela de pago.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</ion-content>

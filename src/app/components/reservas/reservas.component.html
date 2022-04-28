@@ -16,6 +16,7 @@
                 color="danger" 
                 expand="block"
                 *ngIf="mostrarBotonReserva(reserva)"  
+                (click)="cancelarReserva(reserva)"
               >Cancelar Reserva</ion-button>
             </div>
           </div>
@@ -28,13 +29,8 @@
 <div 
   *ngIf="arrayReservas.length > 0 && tieneCitasCompletadas()" 
   class="enlace"
-  (click)="verCitas(arrayReservas)"
 >
-  <ion-text>Ver citas completadas</ion-text>
-</div>
-
-<div class="info">
-  <p>Ver información acerca de las cancelaciones.</p>
+  <ion-text (click)="verReservasCompletadas(reservasCompletadas)">Ver citas completadas</ion-text>
 </div>
 
 <div *ngIf="arrayReservas.length === 0" class="sin-reservas">

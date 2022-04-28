@@ -95,3 +95,20 @@ ion-segment ion-label{
 span {
     font-family: 'Quicksand', sans-serif;
 }
+
+.info {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    color: rgb(96, 96, 255);
+    text-decoration: underline;
+}
+
+.info p {
+    font-size: 1.1em;
+    cursor: pointer;
+    font-weight: bold;
+}

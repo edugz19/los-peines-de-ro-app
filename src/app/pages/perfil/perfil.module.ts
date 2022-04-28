@@ -10,6 +10,7 @@ import { PerfilPage } from './perfil.page';
 import { HeaderModule } from '../../modules/header/header.module';
 import { ReservasComponent } from '../../components/reservas/reservas.component';
 import { FavoritosComponent } from '../../components/favoritos/favoritos.component';
+import { ReservasCompletadasComponent } from '../../components/reservas-completadas/reservas-completadas.component';
 
 @NgModule({
   imports: [
@@ -20,6 +21,6 @@ import { FavoritosComponent } from '../../components/favoritos/favoritos.compone
     HeaderModule,
     ReactiveFormsModule
   ],
-  declarations: [PerfilPage, ReservasComponent, FavoritosComponent]
+  declarations: [PerfilPage, ReservasComponent, FavoritosComponent, ReservasCompletadasComponent]
 })
 export class PerfilPageModule {}
