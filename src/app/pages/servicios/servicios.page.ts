@@ -8,6 +8,7 @@ import { FavoritosService } from '../../services/favoritos/favoritos.service';
 import { User } from 'firebase/auth';
 import { AuthService } from '../../services/auth/auth.service';
 import { CalendarComponent } from '../../components/calendar/calendar.component';
+import { InfoComponent } from 'src/app/components/info/info.component';
 
 @Component({
   selector: 'app-servicios',
@@ -217,7 +218,10 @@ export class ServiciosPage implements OnInit {
         },
         {
           text: 'Ver más información',
-          icon: 'information-circle'
+          icon: 'information-circle',
+          handler: () => {
+            this.openInfoModal(servicio);
+          }
         },
         {
           text: 'Volver atrás',
@@ -246,5 +250,17 @@ export class ServiciosPage implements OnInit {
     });
 
     (await toast).present();
+  }
+
+  async openInfoModal(servicio: Servicio) {
+    const modal = await this.modalController.create({
+      component: InfoComponent,
+      cssClass: 'info-modal',
+      componentProps: {
+        servicio
+      },
+    });
+
+    return await modal.present();
   }
 }

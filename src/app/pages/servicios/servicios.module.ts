@@ -10,6 +10,7 @@ import { ServiciosPage } from './servicios.page';
 import { FilterPipe } from 'src/app/pipes/filter.pipe';
 import { SelectPipe } from '../../pipes/select.pipe';
 import { CalendarComponent } from '../../components/calendar/calendar.component';
+import { InfoComponent } from '../../components/info/info.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { CalendarComponent } from '../../components/calendar/calendar.component'
     ServiciosPage,
     FilterPipe,
     SelectPipe,
-    CalendarComponent
+    CalendarComponent,
+    InfoComponent
   ]
 })
 export class ServiciosPageModule {}

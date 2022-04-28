@@ -11,6 +11,7 @@ import { ServiciosService } from 'src/app/services/servicios/servicios.service';
 import { Servicio } from '../../models/servicio.interface';
 import { Subscription } from 'rxjs';
 import { CalendarComponent } from '../calendar/calendar.component';
+import { InfoComponent } from '../info/info.component';
 
 @Component({
   selector: 'app-favoritos',
@@ -119,6 +120,9 @@ export class FavoritosComponent implements OnInit, OnDestroy {
         {
           text: 'Ver más información',
           icon: 'information-circle',
+          handler: () => {
+            this.openInfoModal(servicio);
+          }
         },
         {
           text: 'Volver atrás',
@@ -175,6 +179,18 @@ export class FavoritosComponent implements OnInit, OnDestroy {
       componentProps: {
         servicio,
         usuario,
+      },
+    });
+
+    return await modal.present();
+  }
+
+  async openInfoModal(servicio: Servicio) {
+    const modal = await this.modalController.create({
+      component: InfoComponent,
+      cssClass: 'info-modal',
+      componentProps: {
+        servicio
       },
     });
 
