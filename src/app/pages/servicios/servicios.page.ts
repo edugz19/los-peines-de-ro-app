@@ -220,7 +220,7 @@ export class ServiciosPage implements OnInit {
           text: 'Ver más información',
           icon: 'information-circle',
           handler: () => {
-            this.openInfoModal(servicio);
+            this.openInfoModal(servicio, this.usuario);
           }
         },
         {
@@ -252,12 +252,13 @@ export class ServiciosPage implements OnInit {
     (await toast).present();
   }
 
-  async openInfoModal(servicio: Servicio) {
+  async openInfoModal(servicio: Servicio, usuario: User) {
     const modal = await this.modalController.create({
       component: InfoComponent,
       cssClass: 'info-modal',
       componentProps: {
-        servicio
+        servicio,
+        usuario
       },
     });
 

@@ -3,5 +3,20 @@
     <h3>{{ servicio.nombre | titlecase }}</h3>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur cum et corrupti, unde laboriosam alias sunt ex. Labore earum, maxime eaque qui mollitia sunt voluptates vero, reprehenderit quasi dolorum explicabo!</p>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum reiciendis totam itaque harum repellendus quasi fuga unde eveniet recusandae, alias a exercitationem, vero voluptates laudantium. Quibusdam sed iste sequi ipsam!</p>
+
+    <ion-footer collapse="fade">
+      <ion-toolbar>
+        <ion-chip slot="start">
+          <ion-icon name="logo-euro"></ion-icon>
+          <ion-label>{{ servicio.precio }}</ion-label>
+        </ion-chip>
+
+        <ion-button 
+          class="button" 
+          expand="block"
+          (click)="reservar(servicio, usuario)"
+          >Reservar</ion-button>
+      </ion-toolbar>
+    </ion-footer>
   </div>
 </ion-content>

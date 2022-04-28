@@ -25,11 +25,13 @@ import { Stripe } from '@ionic-native/stripe/ngx';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { VariablesGlobales } from './global/VariablesGlobales';
 import { LocalNotifications } from '@awesome-cordova-plugins/local-notifications/ngx';
+import { InfoComponent } from './components/info/info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TabsComponent
+    TabsComponent,
+    InfoComponent
   ],
   entryComponents: [],
   imports: [

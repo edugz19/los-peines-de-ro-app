@@ -22,6 +22,6 @@ import { InfoComponent } from '../../components/info/info.component';
     HeaderModule,
     ReactiveFormsModule
   ],
-  declarations: [PerfilPage, ReservasComponent, FavoritosComponent, ReservasCompletadasComponent, InfoComponent]
+  declarations: [PerfilPage, ReservasComponent, FavoritosComponent, ReservasCompletadasComponent]
 })
 export class PerfilPageModule {}

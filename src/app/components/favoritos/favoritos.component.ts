@@ -121,7 +121,7 @@ export class FavoritosComponent implements OnInit, OnDestroy {
           text: 'Ver más información',
           icon: 'information-circle',
           handler: () => {
-            this.openInfoModal(servicio);
+            this.openInfoModal(servicio, this.usuario);
           }
         },
         {
@@ -185,12 +185,13 @@ export class FavoritosComponent implements OnInit, OnDestroy {
     return await modal.present();
   }
 
-  async openInfoModal(servicio: Servicio) {
+  async openInfoModal(servicio: Servicio, usuario: User) {
     const modal = await this.modalController.create({
       component: InfoComponent,
       cssClass: 'info-modal',
       componentProps: {
-        servicio
+        servicio,
+        usuario
       },
     });
 

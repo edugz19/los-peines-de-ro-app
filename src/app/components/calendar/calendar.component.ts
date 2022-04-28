@@ -342,7 +342,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
             this.reservaSvc.createReserva(this.reserva, 'presencial');
             this.localNotifications.schedule({
               id: 1,
-              text: `Se ha completado tu reserva de ${servicio.nombre} con fecha ${fecha} y hora ${horaInicio}`,
+              text: `Se ha completado tu reserva: ${servicio.nombre.toUpperCase()} con fecha de ${this.formatearFecha(fecha, horaInicio)}.`,
             });
             this.presentLoading();
             this.modalController.dismiss({
@@ -378,5 +378,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         console.log(data);
       });
+  }
+
+  formatearFecha(dia: string, hora: string): string {
+    const fecha = dia + ' ' + hora;
+    return moment(fecha, 'YYYY-MM-DD HH:mm').locale('es').format('LLLL');
   }
 }

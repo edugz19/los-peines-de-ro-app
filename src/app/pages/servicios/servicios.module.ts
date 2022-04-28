@@ -23,8 +23,7 @@ import { InfoComponent } from '../../components/info/info.component';
     ServiciosPage,
     FilterPipe,
     SelectPipe,
-    CalendarComponent,
-    InfoComponent
+    CalendarComponent
   ]
 })
 export class ServiciosPageModule {}
