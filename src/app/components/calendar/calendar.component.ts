@@ -1,5 +1,12 @@
 /* eslint-disable prefer-arrow/prefer-arrow-functions */
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   IonDatetime,
   ModalController,
@@ -20,8 +27,8 @@ import { Stripe } from '@ionic-native/stripe/ngx';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FESTIVOS } from '../../constants/festivos.const';
 import { LocalNotifications } from '@awesome-cordova-plugins/local-notifications/ngx';
-
-declare let paypal;
+import { CardComponent } from '../card/card.component';
+import { StripeService } from '../../services/stripe/stripe.service';
 
 @Component({
   selector: 'app-calendar',
@@ -57,10 +64,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     public actionSheetController: ActionSheetController,
     public toastController: ToastController,
     public router: Router,
-    private afFun: AngularFireFunctions,
     public loadingController: LoadingController,
-    private stripe: Stripe,
-    private http: HttpClient,
     private localNotifications: LocalNotifications
   ) {
     // this.afFun.useEmulator('localhost', 5001);
@@ -128,9 +132,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.horaInvalida = true;
     this.hora = '';
 
-
-
-    if (dia === 'Saturday' || dia === 'Sunday' || this.festivos.includes(fechaFormateada)) {
+    if (
+      dia === 'Saturday' ||
+      dia === 'Sunday' ||
+      this.festivos.includes(fechaFormateada)
+    ) {
       this.esDiaValido = false;
     } else {
       for (const item of this.reservas) {
@@ -266,60 +272,23 @@ export class CalendarComponent implements OnInit, OnDestroy {
           text: 'Pagar con tarjeta de crédito/débito',
           icon: 'card-outline',
           handler: () => {
-            this.stripe.setPublishableKey(environment.stripeKey);
-
-            const cardDetails = {
-              // eslint-disable-next-line id-blacklist
-              number: '4242424242424242',
-              expMonth: 12,
-              expYear: 2023,
-              cvc: '220',
-            };
-
-            this.stripe
-              .createCardToken(cardDetails)
-              .then((token) => {
-                console.log(token);
-                this.makePayment(token.id, this.servicio);
-              })
-              .catch((error) => console.error(error));
-
-            // this.modalController.dismiss({
-            //   dismissed: true
-            // });
-
-            // this.checkout(this.servicio);
-
-            // const id = servicio.id + usuario.uid + fecha + horaInicio;
-
-            // this.reserva = {
-            //   id,
-            //   uid: usuario.uid,
-            //   nombre: servicio.nombre,
-            //   servicio: servicio.id,
-            //   horaInicio,
-            //   horaFin,
-            //   fecha,
-            //   precio: servicio.precio,
-            //   pagado: true,
-            // };
-
-            // this.reservaSvc.createReserva(this.reserva, 'stripe');
+            this.cardModal(servicio, this.usuario, fecha, horaInicio, horaFin);
+            this.modalController.dismiss({
+              dismissed: true,
+            });
           },
         },
         {
           text: 'Pagar con Paypal',
           icon: 'logo-paypal',
           handler: () => {
-
-            const paypalCreateOrder = this.afFun.httpsCallable('paypalCreateOrder');
-            const paypalHandleOrder = this.afFun.httpsCallable('paypalHandleOrder');
-
-            paypal.Buttons({
-              createOrder: (data, actions) => paypalCreateOrder(data).subscribe(res => res.data.id),
-              onApprove: (data, actions) => paypalHandleOrder({orderId: data.orderID})
-            }).render(this.paypalElement.nativeElement);
-          }
+            // const paypalCreateOrder = this.afFun.httpsCallable('paypalCreateOrder');
+            // const paypalHandleOrder = this.afFun.httpsCallable('paypalHandleOrder');
+            // paypal.Buttons({
+            //   createOrder: (data, actions) => paypalCreateOrder(data).subscribe(res => res.data.id),
+            //   onApprove: (data, actions) => paypalHandleOrder({orderId: data.orderID})
+            // }).render(this.paypalElement.nativeElement);
+          },
         },
         {
           text: 'Pago presencial',
@@ -339,15 +308,21 @@ export class CalendarComponent implements OnInit, OnDestroy {
               pagado: false,
             };
 
-            this.reservaSvc.createReserva(this.reserva, 'presencial');
-            this.localNotifications.schedule({
-              id: 1,
-              text: `Se ha completado tu reserva: ${servicio.nombre.toUpperCase()} con fecha de ${this.formatearFecha(fecha, horaInicio)}.`,
-            });
             this.presentLoading();
-            this.modalController.dismiss({
-              dismissed: true,
-            });
+            setTimeout(() => {
+              this.reservaSvc.createReserva(this.reserva);
+              this.modalController.dismiss({
+                dismissed: true,
+              });
+              this.localNotifications.schedule({
+                id: 1,
+                // eslint-disable-next-line max-len
+                text: `Se ha completado tu reserva: ${servicio.nombre.toUpperCase()} con fecha de ${this.formatearFecha(
+                  fecha,
+                  horaInicio
+                )}.`,
+              });
+            }, 2000);
           },
         },
         {
@@ -369,19 +344,30 @@ export class CalendarComponent implements OnInit, OnDestroy {
     await loading.present();
   }
 
-  makePayment(token: string, servicio: Servicio) {
-    this.http
-      .post(
-        'https://us-central1-los-peines-de-ro.cloudfunctions.net/payWithStripe',
-        { token, servicio }
-      )
-      .subscribe((data) => {
-        console.log(data);
-      });
-  }
-
   formatearFecha(dia: string, hora: string): string {
     const fecha = dia + ' ' + hora;
     return moment(fecha, 'YYYY-MM-DD HH:mm').locale('es').format('LLLL');
+  }
+
+  async cardModal(
+    servicio: Servicio,
+    usuario: User,
+    fecha: string,
+    horaInicio: string,
+    horaFin: string
+  ) {
+    const modal = await this.modalController.create({
+      component: CardComponent,
+      cssClass: 'card-modal',
+      componentProps: {
+        servicio,
+        usuario,
+        fecha,
+        horaInicio,
+        horaFin,
+      },
+    });
+
+    return await modal.present();
   }
 }

@@ -1,0 +1,82 @@
+<div class="contain">
+  <div class="cc">
+    <h2>Caja Rural de Jaén</h2>
+
+    <span class="provider mastercard">MasterCard</span>
+    <span class="provider amex">American Express</span>
+    <span class="provider visa">Visa</span>
+
+    <!-- card number -->
+    <div class="number">
+      <input type="text" maxlength="4" placeholder="XXXX" minlength="4" required inputmode="numeric" #number1 />
+      <input type="text" maxlength="4" placeholder="XXXX" minlength="4" required inputmode="numeric" #number2 />
+      <input type="text" maxlength="4" placeholder="XXXX" minlength="4" required inputmode="numeric" #number3 />
+      <input type="text" maxlength="4" placeholder="XXXX" minlength="4" required inputmode="numeric" #number4 />
+    </div>
+
+    <!-- valid / ccv -->
+    <div class="date">
+      <span class="instructions valid">Exp. Date</span>
+      <!-- <input type="text" maxlength="5" placeholder="00/00" /> -->
+
+      <select #mes required>
+        <option value="01">01</option>
+        <option value="02">02</option>
+        <option value="03">03</option>
+        <option value="04">04</option>
+        <option value="05">05</option>
+        <option value="06">06</option>
+        <option value="07">07</option>
+        <option value="08">08</option>
+        <option value="09">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+      </select>
+
+      <span style="color: white; margin: 0 5px">/</span>
+
+      <select #año required style="margin-right: 10px;">
+        <option value="2022">22</option>
+        <option value="2023">23</option>
+        <option value="2024">24</option>
+        <option value="2025">25</option>
+        <option value="2026">26</option>
+        <option value="2027">27</option>
+        <option value="2028">28</option>
+        <option value="2029">29</option>
+        <option value="2030">30</option>
+      </select>
+
+      <span class="instructions valid">CCV</span>
+      <input type="text" maxlength="3" placeholder="123" class="cvc" minlength="3" required inputmode="numeric" #cvc />
+    </div>
+
+    <!-- name on card -->
+    <div class="name">
+      <input
+        class="full-name"
+        type="text"
+        required
+        placeholder="Nombre y Apellidos"
+        #nombre
+      />
+      <span class="instructions">Nombre de la tarjeta</span>
+    </div>
+
+    <!-- shine -->
+    <div class="shine"></div>
+    <div class="shine shine-layer-two"></div>
+  </div>
+
+  <ion-grid style="width: 100%;">
+      <ion-row style="width: 100%;">
+          <ion-col size="6">
+            <ion-button expand="block" color="danger" (click)="cerrarModal()">VOLVER ATRÁS</ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" color="primary" (click)="pagar()">PAGAR</ion-button>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+</div>

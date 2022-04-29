@@ -1,0 +1,162 @@
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Anaheim);
+@import url(https://fonts.googleapis.com/css?family=Inconsolata);
+
+$blue: #174395;
+$lightBlue: #ace4fa;
+$silver: #ececec;
+$space: 20px;
+
+.contain {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+}
+
+.cc {
+  background: $blue;
+  border-radius: 20px;
+  height: 310px;
+  overflow: hidden;
+  padding: $space;
+  position: relative;
+  width: 100%;
+}
+
+.shine {
+  background: rgba(255, 255, 255, 0.05);
+  left: 390px;
+  top: 0;
+  margin: 0 15px 0 0;
+  padding: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  -webkit-transform: skew(50deg);
+  -moz-transform: skew(50deg);
+  -ms-transform: skew(50deg);
+  -o-transform: skew(50deg);
+  transform: skew(50deg);
+}
+
+.shine-layer-two {
+  -webkit-transform: skew(80deg);
+  -moz-transform: skew(80deg);
+  -ms-transform: skew(80deg);
+  -o-transform: skew(80deg);
+  transform: skew(80deg);
+}
+
+h2 {
+  font: 22px Anaheim;
+  color: #fff;
+  margin: 0 $space/2 $space/2 0;
+  padding: 0;
+  text-align: right;
+}
+
+span {
+  text-transform: uppercase;
+}
+
+.number,
+.date {
+  margin-bottom: $space/2;
+}
+
+.provider {
+  display: inline-block;
+  margin: 0 $space/2 $space/2 0;
+  width: 71px;
+  height: 44px;
+}
+
+.mastercard,
+.visa,
+.amex {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.amex {
+  background-position: 71px 0;
+}
+.visa {
+  background-position: 147px 0;
+}
+
+input {
+  background: $silver;
+  border: 0;
+  border-radius: 4px;
+  font: 20px Inconsolata, sans-serif;
+  color: #303030;
+  margin: 0 2px 3px 0;
+  padding: 8px $space/2;
+  text-align: center;
+  width: 24%;
+  -moz-box-shadow: 1px 1px 0px 1px #0e306e;
+  -webkit-box-shadow: 1px 1px 0px 1px #0e306e;
+  box-shadow: 1px 1px 0px 1px #0e306e;
+  position: relative;
+  z-index: 10;
+
+  &:nth-child(4) {
+    margin-right: 0;
+  }
+}
+
+.cvc {
+    width: 19%;
+}
+
+select {
+  background: $silver;
+  border: 0;
+  border-radius: 4px;
+  font: 20px Inconsolata, sans-serif;
+  color: #303030;
+  margin: 0 2px 3px 0;
+  padding: 8px $space/2;
+  text-align: center;
+  width: 17%;
+  -moz-box-shadow: 1px 1px 0px 1px #0e306e;
+  -webkit-box-shadow: 1px 1px 0px 1px #0e306e;
+  box-shadow: 1px 1px 0px 1px #0e306e;
+  position: relative;
+  z-index: 10;
+
+  &:nth-child(4) {
+    margin-right: 0;
+  }
+}
+
+.date input {
+  margin-right: $space;
+}
+
+.valid {
+  position: relative;
+  margin-right: $space/2;
+  width: 20px;
+}
+
+.full-name {
+  width: 100%;
+  text-align: left;
+}
+
+.instructions {
+  letter-spacing: 1px;
+  font: 12px Anaheim, sans-serif;
+  color: $lightBlue;
+}

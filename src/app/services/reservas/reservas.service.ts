@@ -35,7 +35,7 @@ export class ReservasService {
     return this.db.collection<Reserva>('reservas').doc(id).valueChanges();
   }
 
-  createReserva(reserva: Reserva, metodo: string) {
+  createReserva(reserva: Reserva) {
     this.db.collection('reservas').doc(reserva.id).set({
       id: reserva.id,
       uid: reserva.uid,
@@ -48,14 +48,7 @@ export class ReservasService {
       pagado: reserva.pagado
     })
       .then(success => {
-        if (metodo === 'presencial') {
           this.favToast('La cita se ha creado correctamente', 'success');
-        }
-      })
-      .catch(err => {
-        if (metodo === 'presencial') {
-          this.favToast('Error al crear la reserva', 'danger');
-        }
       });
   }
 

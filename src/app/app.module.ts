@@ -26,12 +26,14 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { VariablesGlobales } from './global/VariablesGlobales';
 import { LocalNotifications } from '@awesome-cordova-plugins/local-notifications/ngx';
 import { InfoComponent } from './components/info/info.component';
+import { CardComponent } from './components/card/card.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TabsComponent,
-    InfoComponent
+    InfoComponent,
+    CardComponent
   ],
   entryComponents: [],
   imports: [
