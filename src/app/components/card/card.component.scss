@@ -16,7 +16,7 @@ $space: 20px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 10px;
     width: 100%;
     padding: 10px;
 }
@@ -58,7 +58,7 @@ $space: 20px;
 h2 {
   font: 22px Anaheim;
   color: #fff;
-  margin: 0 $space/2 $space/2 0;
+  margin: 0 $space/2 $space 40px;
   padding: 0;
   text-align: right;
 }
@@ -67,31 +67,18 @@ span {
   text-transform: uppercase;
 }
 
-.number,
-.date {
-  margin-bottom: $space/2;
+.nombre {
+  text-transform: uppercase;
+  font: 12px Anaheim, sans-serif;
+  font-size: 25px;
+  text-align: center;
+  color: white;
+  margin-bottom: 40px;
+  margin-top: 40px;
 }
 
-.provider {
-  display: inline-block;
-  margin: 0 $space/2 $space/2 0;
-  width: 71px;
-  height: 44px;
-}
-
-.mastercard,
-.visa,
-.amex {
-  text-indent: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.amex {
-  background-position: 71px 0;
-}
-.visa {
-  background-position: 147px 0;
+.number {
+  margin-bottom: 20px;
 }
 
 input {

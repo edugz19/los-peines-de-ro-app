@@ -2,9 +2,7 @@
   <div class="cc">
     <h2>Caja Rural de Jaén</h2>
 
-    <span class="provider mastercard">MasterCard</span>
-    <span class="provider amex">American Express</span>
-    <span class="provider visa">Visa</span>
+    <p class="nombre">{{ usuario.displayName }}</p>
 
     <!-- card number -->
     <div class="number">
@@ -36,7 +34,7 @@
 
       <span style="color: white; margin: 0 5px">/</span>
 
-      <select #año required style="margin-right: 10px;">
+      <select #año required style="margin-right: 40px;">
         <option value="2022">22</option>
         <option value="2023">23</option>
         <option value="2024">24</option>
@@ -50,18 +48,6 @@
 
       <span class="instructions valid">CCV</span>
       <input type="text" maxlength="3" placeholder="123" class="cvc" minlength="3" required inputmode="numeric" #cvc />
-    </div>
-
-    <!-- name on card -->
-    <div class="name">
-      <input
-        class="full-name"
-        type="text"
-        required
-        placeholder="Nombre y Apellidos"
-        #nombre
-      />
-      <span class="instructions">Nombre de la tarjeta</span>
     </div>
 
     <!-- shine -->

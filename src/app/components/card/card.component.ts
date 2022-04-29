@@ -40,7 +40,6 @@ export class CardComponent implements OnInit {
   @ViewChild('mes') mes: ElementRef<HTMLSelectElement>;
   @ViewChild('año') año: ElementRef<HTMLSelectElement>;
   @ViewChild('cvc') cvc: ElementRef<HTMLInputElement>;
-  @ViewChild('nombre') nombre: ElementRef<HTMLInputElement>;
 
   public reserva: Reserva;
   public numeroCorrecto = false;
@@ -76,8 +75,7 @@ export class CardComponent implements OnInit {
         .value,
       this.año.nativeElement.options[this.año.nativeElement.selectedIndex]
         .value,
-      this.cvc.nativeElement.value,
-      this.nombre.nativeElement.value,
+      this.cvc.nativeElement.value
     ];
 
     console.log(array);
@@ -106,7 +104,7 @@ export class CardComponent implements OnInit {
             .value
         ),
         cvc: this.cvc.nativeElement.value,
-        name: this.nombre.nativeElement.value,
+        name: this.usuario.displayName,
         email: this.usuario.email,
       };
 
@@ -144,7 +142,7 @@ export class CardComponent implements OnInit {
         });
 
       if (this.numeroCorrecto && this.fechaCorrecta && this.cvcCorrecto) {
-        this.loader.presentLoading('Realizando el pago....', 5000);
+        this.loader.presentLoading('Realizando el pago....', 7000);
         this.stripe
           .createCardToken(cardDetails)
           .then((token) => {
@@ -175,8 +173,7 @@ export class CardComponent implements OnInit {
                   pagado: true,
                 };
 
-                setTimeout(() => {
-                  this.reservaSvc.createReserva(this.reserva);
+                this.reservaSvc.createReserva(this.reserva);
                   this.cerrarModal();
                   this.localNotifications.schedule({
                     id: 1,
@@ -186,7 +183,7 @@ export class CardComponent implements OnInit {
                       this.horaInicio
                     )}.`,
                   });
-                }, 2000);
+
               } else {
                 console.log('Error al realizar el pago');
                 this.alerts.mostrarMensaje(
