@@ -15,6 +15,7 @@ export class RegistroPage implements OnInit {
   ocultarPass = true;
   ocultarVerifPass = true;
   private tlf = /[0-9]{9}/;
+  errorPass = 'Las contraseñas no coinciden';
   registroForm = this.fb.group({
     nombre: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
@@ -74,6 +75,16 @@ export class RegistroPage implements OnInit {
       this.registroForm.get(campo)?.dirty &&
       this.registroForm.get(campo)?.invalid
     );
+  }
+
+  esValidPass(pass1: string, pass2: string): boolean {
+    let valido = false;
+
+    if (this.registroForm.get(pass1).value === this.registroForm.get(pass2).value) {
+      valido = true;
+    }
+
+    return !valido;
   }
 
 }

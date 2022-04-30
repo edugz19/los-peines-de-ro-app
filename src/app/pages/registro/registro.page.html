@@ -58,7 +58,7 @@
             ></ion-input>
             <ion-icon [name]="ocultarVerifPass ? 'eye' : 'eye-off'" slot="end" (click)="ocultarVerifPass = !ocultarVerifPass"></ion-icon>
           </ion-item>
-          <p *ngIf="esValido('verificarPass')" class="danger">{{ mostrarError('verificarPass') }}</p>
+          <p *ngIf="esValidPass('pass', 'verificarPass')" class="danger">{{ errorPass }}</p>
 
           <ion-button
             [disabled]="registroForm.invalid"
