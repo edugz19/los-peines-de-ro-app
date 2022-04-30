@@ -20,15 +20,10 @@ import { Reserva } from 'src/app/models/reserva.interface';
 import { ReservasService } from '../../services/reservas/reservas.service';
 import { User } from 'firebase/auth';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { LoadingController } from '@ionic/angular';
-import { Stripe } from '@ionic-native/stripe/ngx';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FESTIVOS } from '../../constants/festivos.const';
 import { LocalNotifications } from '@awesome-cordova-plugins/local-notifications/ngx';
 import { CardComponent } from '../card/card.component';
-import { StripeService } from '../../services/stripe/stripe.service';
 
 @Component({
   selector: 'app-calendar',
@@ -282,12 +277,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
           text: 'Pagar con Paypal',
           icon: 'logo-paypal',
           handler: () => {
-            // const paypalCreateOrder = this.afFun.httpsCallable('paypalCreateOrder');
-            // const paypalHandleOrder = this.afFun.httpsCallable('paypalHandleOrder');
-            // paypal.Buttons({
-            //   createOrder: (data, actions) => paypalCreateOrder(data).subscribe(res => res.data.id),
-            //   onApprove: (data, actions) => paypalHandleOrder({orderId: data.orderID})
-            // }).render(this.paypalElement.nativeElement);
+
           },
         },
         {
