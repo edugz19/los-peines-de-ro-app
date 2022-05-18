@@ -4,15 +4,13 @@ import { Servicio } from '../models/servicio.interface';
 
 @Injectable()
 export class VariablesGlobales {
-    public servicios: Servicio[];
-    public usuario: User;
+    public imagenBlob: string;
 
     constructor() {
         this.initialize();
     }
 
     initialize() {
-        this.servicios = [];
-        this.usuario = null;
+        this.imagenBlob = '';
     }
 }

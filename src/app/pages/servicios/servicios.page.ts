@@ -138,14 +138,6 @@ export class ServiciosPage implements OnInit {
     return duracion;
   }
 
-  truncarPrecio(precio: number): number {
-    if (precio % 1 === 0) {
-      return Math.trunc(precio);
-    } else {
-      return precio;
-    }
-  }
-
   async openReservaModal(servicio: Servicio, usuario: User) {
     const modal = await this.modalController.create({
       component: CalendarComponent,

@@ -20,7 +20,7 @@
             >
           </ion-col>
           <ion-col size="2" class="text-end">
-            <strong>{{ truncarPrecio(servicio.precio) }}€</strong>
+            <strong>{{ servicio.precio.toFixed(2) }}€</strong>
           </ion-col>
         </ion-row>
       </ion-grid>

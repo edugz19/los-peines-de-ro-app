@@ -5,81 +5,89 @@ const cors = require("cors")({ origin: true });
 const stripe = require("stripe")(
   "sk_test_51KX10dDbG1rPW2s64WYaoaETzuXwF5OyhLroSenocfMxkXr3Xbv9dDodht1UQx1RidR4bHozBsTcJmqrF7RqUx1D00Z6XJwg2i"
 );
+const nodemailer = require("nodemailer");
 
 const stripePay = express();
 stripePay.use(cors);
+
+const sendEmail = express();
+sendEmail.use(cors);
+
 admin.initializeApp(functions.config().firebase);
 
-// const clientId = 'AUzgp-Oy3AhP715O5cskSHHbXMV1lBmUqyzwM5FMhYMguKU48BytgQdKfkVh9m2mgc3OUnzlfOkoHOD6';
-// const secretKey = 'ECawuCbTfHwpZwayj1jfr8Bm3gqKZ09LYpW8UapAwdXVb2FInxdekUP-f2NAC_356UR953QFYobhc0jQ';
-// const paypal = require('@paypal/checkout-server-sdk');
-// const env = new paypal.core.SandboxEnvironment(clientId, secretKey);
-// const client = new paypal.core.PayPalHttpClient(env);
-// let request = new paypal.orders.OrdersCreateRequest();
-
-exports.stripePay = functions.region('europe-west2').https.onRequest((req, res) => {
-  return cors(req, res, () => {
-    stripe.charges
-      .create({
-        amount: req.body.servicio.precio * 100,
-        currency: "eur",
-        description: req.body.servicio.nombre.toUpperCase(),
-        source: req.body.token,
-      })
-      .then((charge) => {
-        res.send(charge);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "edugarciazambrana19@gmail.com",
+    pass: "xwjbgkftifkztyfz",
+  },
 });
 
-// stripePay.post("/stripe_checkout", async (req, res) => {
-//   return cors(req, res, async () => {
-//     console.log(req.body);
+exports.stripePay = functions
+  .region("europe-west2")
+  .https.onRequest((req, res) => {
+    return cors(req, res, () => {
+      stripe.charges
+        .create({
+          amount: req.body.servicio.precio * 100,
+          currency: "eur",
+          description: req.body.servicio.nombre.toUpperCase(),
+          source: req.body.token,
+        })
+        .then((charge) => {
+          res.send(charge);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  });
 
-//     const chargeObject = await stripe.charges.create({
-//       amount: Math.round(req.body.servicio.precio * 100),
-//       currency: "eur",
-//       source: req.body.token,
-//       description: req.body.servicio.descripcion.toUpperCase(),
-//     });
+exports.sendEmail = functions
+  .region("europe-west2")
+  .https.onRequest((req, res) => {
+    return cors(req, res, () => {
+      const mailOptions = {
+        from: `Los Peines de Ro <edugarciazambrana19@gmail.com>`,
+        to: req.body.usuario.email,
+        subject: "Reserva en Peluquería Los Peines de Ro",
+        html: `<div>
+                <h2>Confirmación de reserva</h2>
+                <h4>Hola ${req.body.usuario.displayName},</h4>
+                <p>
+                Se ha confirmado tu reserva para el día ${req.body.reserva.fecha} a las ${req.body.reserva.horaInicio} para un
+                corte de pelo.
+                </p>
+                <p>
+                La factura está adjuntada en este correo. Atentamente el equipo de Los
+                Peines de Ro.
+                </p><br/>
+                <img
+                  style="width: 80px; margin-top: 20px;"
+                  src="https://firebasestorage.googleapis.com/v0/b/los-peines-de-ro.appspot.com/o/icon.png?alt=media&token=369dd884-3e61-4e3c-ae88-a3a0be54ac17"
+                  alt="Logo"
+                />
+              </div>
+              `,
+        attachments: [
+          {
+            // encoded string as an attachment
+            filename: req.body.reserva.id + ".pdf",
+            content: req.body.data,
+            encoding: "base64",
+          },
+        ],
+      };
 
-//     try {
-//       await stripe.charges.capture(chargeObject.id);
-//       res.status(200).send(chargeObject);
-//     } catch (error) {
-//       await stripe.refunds.create({ charge: chargeObject });
-//     }
-//   });
-// });
+      return transporter.sendMail(mailOptions, (error, data) => {
+        if (error) {
+          console.log(error);
+          return;
+        }
 
-// exports.stripePay = functions.region("europe-west2").https.onRequest(stripePay);
-
-// exports.paypalCreateOrder = functions.https.onCall(async (data, context) => {
-//   request.requestBody({
-//     "intent": "capture",
-//     "purchase_units": [
-//       {
-//         "amount": {
-//           "currency_code": "EUR",
-//           "value": "100.00"
-//         }
-//       }
-//     ]
-//   });
-
-//   const response = await client.execute(request);
-
-//   return response.result;
-// });
-
-// exports.paypalHandleOrder = functions.https.onCall(async (data, context) => {
-//   const orderId = data.orderId;
-//   request = new paypal.orders.OrdersCaptureRequest(orderId);
-//   request.requestBody({});
-//   const response = await client.execute(request);
-
-//   return response.result;
-// });
+        console.log("Mail enviado");
+      });
+    });
+  });

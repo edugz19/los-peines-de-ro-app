@@ -7,8 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
-import { HeaderComponent } from 'src/app/components/header/header.component';
-import { HeaderModule } from 'src/app/modules/header/header.module';
 import { CarouselComponent } from '../../components/carousel/carousel.component';
 
 @NgModule({
@@ -16,8 +14,7 @@ import { CarouselComponent } from '../../components/carousel/carousel.component'
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule,
-    HeaderModule
+    HomePageRoutingModule
   ],
   declarations: [
     HomePage,

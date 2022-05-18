@@ -11,6 +11,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFireFunctionsModule } from '@angular/fire/compat/functions';
+import { AngularFireRemoteConfigModule } from '@angular/fire/compat/remote-config';
 import { TabsComponent } from './components/tabs/tabs.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -39,7 +40,8 @@ import { CardComponent } from './components/card/card.component';
     ReactiveFormsModule,
     FontAwesomeModule,
     AngularFireFunctionsModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFireRemoteConfigModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
