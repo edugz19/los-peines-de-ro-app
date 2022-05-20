@@ -24,6 +24,7 @@ import { LoadingController } from '@ionic/angular';
 import { FESTIVOS } from '../../constants/festivos.const';
 import { LocalNotifications } from '@awesome-cordova-plugins/local-notifications/ngx';
 import { CardComponent } from '../card/card.component';
+import { MessagingService } from '../../services/messaging/messaging.service';
 
 @Component({
   selector: 'app-calendar',
@@ -60,7 +61,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     public toastController: ToastController,
     public router: Router,
     public loadingController: LoadingController,
-    private localNotifications: LocalNotifications
+    private localNotifications: LocalNotifications,
+    public messaging: MessagingService
   ) {
     // this.afFun.useEmulator('localhost', 5001);
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
@@ -251,7 +253,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       header:
         servicio.nombre.toUpperCase() +
         ' - ' +
-        this.truncarPrecio(servicio.precio) +
+        servicio.precio.toFixed(2) +
         '€',
       subHeader:
         'Reserva el día ' +
@@ -271,13 +273,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
             this.modalController.dismiss({
               dismissed: true,
             });
-          },
-        },
-        {
-          text: 'Pagar con Paypal',
-          icon: 'logo-paypal',
-          handler: () => {
-
           },
         },
         {
@@ -301,6 +296,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
             this.presentLoading();
             setTimeout(() => {
               this.reservaSvc.createReserva(this.reserva);
+              this.messaging.postMessageData(this.reserva);
               this.modalController.dismiss({
                 dismissed: true,
               });

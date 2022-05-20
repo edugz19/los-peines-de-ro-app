@@ -21,6 +21,7 @@ export class PerfilPage implements OnInit, OnDestroy {
   public afTask: AngularFireUploadTask;
   public file: FileI;
   public url: string;
+  public cambiandoImagen: boolean;
   public isAlive = true;
   public usuario: User;
   public isLogged = false;
@@ -45,6 +46,8 @@ export class PerfilPage implements OnInit, OnDestroy {
       ).subscribe((event: any) => {
          this.segment = 'reservas';
       });
+
+      this.cambiandoImagen = false;
     }
 
   async ngOnInit() {
@@ -106,9 +109,15 @@ export class PerfilPage implements OnInit, OnDestroy {
     this.ref = this.storage.ref(filePath);
     this.afTask = this.ref.put(this.file);
 
-    this.ref.getDownloadURL().subscribe( url => {
-      this.authSvc.modificarAvatar(url);
-    });
+    this.cambiandoImagen = true;
+
+    setTimeout(() => {
+      this.ref.getDownloadURL().subscribe( url => {
+        this.authSvc.modificarAvatar(url);
+      });
+    }, 2000);
+
+    setTimeout(() => this.cambiandoImagen = false, 4000);
   }
 
   login() {

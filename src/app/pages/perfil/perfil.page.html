@@ -1,13 +1,15 @@
 <ion-header style="border-bottom: 1px solid rgb(248, 248, 248);" *ngIf="isLogged">
   <div class="header">
     <ion-avatar *ngIf="usuario.photoURL !== null">
-      <img [src]="usuario.photoURL" (click)="inputImageProfile.click()">
+      <img [src]="usuario.photoURL" (click)="inputImageProfile.click()" *ngIf="!cambiandoImagen">
+      <ion-spinner name="lines" *ngIf="cambiandoImagen"></ion-spinner>
     </ion-avatar>
 
     <input type="file" hidden #inputImageProfile (change)="handleImage($event)">
 
     <ion-avatar *ngIf="usuario.photoURL === null">
-        <img src="assets/usuario.png">
+        <img src="assets/usuario.png" *ngIf="!cambiandoImagen">
+        <ion-spinner name="lines" *ngIf="cambiandoImagen"></ion-spinner>
     </ion-avatar>
     
     <span class="text-secondary">{{ usuario.displayName }}</span>

@@ -22,6 +22,7 @@ import { LocalNotifications } from '@awesome-cordova-plugins/local-notifications
 
 const pdfMake = require('pdfmake/build/pdfmake');
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { MessagingService } from '../../services/messaging/messaging.service';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -64,7 +65,8 @@ export class CardComponent implements OnInit {
     private modalController: ModalController,
     private localNotifications: LocalNotifications,
     public variables: VariablesGlobales,
-    public storage: AngularFireStorage
+    public storage: AngularFireStorage,
+    public messaging: MessagingService
   ) {
     this.stripe.setPublishableKey(environment.stripeKey);
   }
@@ -83,7 +85,7 @@ export class CardComponent implements OnInit {
         .value,
       this.año.nativeElement.options[this.año.nativeElement.selectedIndex]
         .value,
-      this.cvc.nativeElement.value
+      this.cvc.nativeElement.value,
     ];
 
     console.log(array);
@@ -182,6 +184,7 @@ export class CardComponent implements OnInit {
                 };
 
                 this.reservaSvc.createReserva(this.reserva);
+                this.messaging.postMessageData(this.reserva);
                 this.generarFactura(cardDetails.number);
                 this.localNotifications.schedule({
                   id: 1,
@@ -192,7 +195,6 @@ export class CardComponent implements OnInit {
                   )}.`,
                 });
                 this.cerrarModal();
-
               } else {
                 console.log('Error al realizar el pago');
                 this.alerts.mostrarMensaje(

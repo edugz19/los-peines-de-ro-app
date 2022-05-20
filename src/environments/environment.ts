@@ -18,7 +18,9 @@ export const environment = {
   paypal: {
     clientId: 'AUzgp-Oy3AhP715O5cskSHHbXMV1lBmUqyzwM5FMhYMguKU48BytgQdKfkVh9m2mgc3OUnzlfOkoHOD6',
     secret: 'ECawuCbTfHwpZwayj1jfr8Bm3gqKZ09LYpW8UapAwdXVb2FInxdekUP-f2NAC_356UR953QFYobhc0jQ'
-  }
+  },
+  // eslint-disable-next-line max-len
+  serverKey: 'AAAA-AaKcB0:APA91bEGbpGUAHVoWkIPHfpkvUACiS6Ct-cjdPlxaCWmvMdfeluF_P1FacssvRLbjZmVcnyRc-d6MsmMkZJxLBxltZUXTyKedQ56FIUcpF8HRSd4v0uZLLmIzooM7mqj2xD2SNWkeqQn'
 };
 
 /*
