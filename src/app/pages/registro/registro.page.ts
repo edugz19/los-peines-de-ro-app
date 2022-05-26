@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { comprobarPass } from '../../helpers/comprobarPass.validator';
 import { FavoritosService } from '../../services/favoritos/favoritos.service';
+import { UsuariosService } from '../../services/usuarios/usuarios.service';
 
 @Component({
   selector: 'app-registro',
@@ -19,7 +20,6 @@ export class RegistroPage implements OnInit {
   registroForm = this.fb.group({
     nombre: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    telefono: ['', [Validators.required, Validators.pattern(this.tlf)]],
     pass: ['', [Validators.required, Validators.minLength(8)]],
     verificarPass: ['', [Validators.required, Validators.minLength(8)]]
   },
@@ -31,7 +31,8 @@ export class RegistroPage implements OnInit {
     private authSvc: AuthService,
     private favSvc: FavoritosService,
     public router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public usuariosSvc: UsuariosService
   ) {}
 
   ngOnInit() {

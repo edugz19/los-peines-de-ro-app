@@ -24,17 +24,6 @@
             ></ion-input>
           </ion-item>
           <p *ngIf="esValido('email')" class="danger">{{ mostrarError('email') }}</p>
-
-          <ion-item class="full-width-input mt-2 ion-no-padding">
-            <ion-input
-            formControlName="telefono"
-            placeholder="Número de teléfono" 
-            type="text" 
-            required
-            maxlength="9"
-            ></ion-input>
-          </ion-item>
-          <p *ngIf="esValido('telefono')" class="danger">{{ mostrarError('telefono') }}</p>
   
           <ion-item class="full-width-input mt-3 ion-no-padding">
             <ion-input

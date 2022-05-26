@@ -10,6 +10,8 @@ import { Servicio } from 'src/app/models/servicio.interface';
 import { Reserva } from 'src/app/models/reserva.interface';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { UsuariosService } from '../../services/usuarios/usuarios.service';
+import { Usuario } from '../../models/Usuario';
 
 @Component({
   selector: 'app-perfil',
@@ -27,7 +29,6 @@ export class PerfilPage implements OnInit, OnDestroy {
   public isLogged = false;
   public segment: string;
   public nombre = new FormControl('');
-  public phone = new FormControl('');
   public arrayFav: Array<string> = [];
   public arrayReservas: Array<Reserva> = [];
   public servicios: Servicio[] = [];
@@ -37,6 +38,7 @@ export class PerfilPage implements OnInit, OnDestroy {
   constructor(
     public router: Router,
     private authSvc: AuthService,
+    public usuariosSvc: UsuariosService,
     public toast: ToastController,
     public storage: AngularFireStorage,
     public actionSheetController: ActionSheetController
@@ -57,10 +59,20 @@ export class PerfilPage implements OnInit, OnDestroy {
       if (this.usuario.emailVerified === true) {
         this.isLogged = true;
 
+        this.usuariosSvc.getUsuario(this.usuario.uid).subscribe( usuario => {
+          if (usuario === undefined) {
+            const usuarioActual = {
+              uid: this.usuario.uid,
+              displayName: this.usuario.displayName,
+              email: this.usuario.email
+            };
+            this.usuariosSvc.crearUsuario(this.usuario.uid, usuarioActual);
+          }
+        });
+
         console.log(this.usuario);
 
         this.nombre.patchValue(this.usuario.displayName);
-        this.phone.patchValue(this.usuario.phoneNumber);
 
       } else {
         this.router.navigate(['/verificar-email']);
@@ -80,9 +92,8 @@ export class PerfilPage implements OnInit, OnDestroy {
 
   async guardarDatos() {
     const nombre = this.nombre.value;
-    const phone = this.phone.value;
 
-    if (nombre === '' || phone === '' || phone === null) {
+    if (nombre === '') {
       const toast = await this.toast.create({
         message: 'Error al guardar sus datos personales',
         duration: 2000,
@@ -93,6 +104,12 @@ export class PerfilPage implements OnInit, OnDestroy {
 
     } else {
       this.authSvc.modificarNombre(nombre);
+      const usuario: Usuario = {
+        uid: this.usuario.uid,
+        displayName: nombre,
+        email: this.usuario.email
+      };
+      this.usuariosSvc.updateUsuario(this.usuario.uid, usuario);
       const toast = await this.toast.create({
         message: 'El perfil se ha actualizado correctamente',
         duration: 2000,
