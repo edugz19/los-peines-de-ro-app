@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CarouselItem } from '../../models/carouselItem.interface';
-import { CAROUSEL_DATA_ITEMS } from '../../constants/carousel.const';
 import { User } from 'firebase/auth';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';

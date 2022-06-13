@@ -8,7 +8,7 @@
     <input type="file" hidden #inputImageProfile (change)="handleImage($event)">
 
     <ion-avatar *ngIf="usuario.photoURL === null">
-        <img src="assets/usuario.png" *ngIf="!cambiandoImagen">
+        <img src="assets/usuario.png" (click)="inputImageProfile.click()" *ngIf="!cambiandoImagen">
         <ion-spinner name="lines" *ngIf="cambiandoImagen"></ion-spinner>
     </ion-avatar>
     

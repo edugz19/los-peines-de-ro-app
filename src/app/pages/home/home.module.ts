@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
-import { CarouselComponent } from '../../components/carousel/carousel.component';
 
 @NgModule({
   imports: [
@@ -17,8 +16,7 @@ import { CarouselComponent } from '../../components/carousel/carousel.component'
     HomePageRoutingModule
   ],
   declarations: [
-    HomePage,
-    CarouselComponent
+    HomePage
   ]
 })
 export class HomePageModule {}
